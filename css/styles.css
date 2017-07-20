@@ -90,23 +90,21 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-body {
-  font-family: 'Roboto', sans-serif;
+h1 {
+  margin-top: 0;
 }
 
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: white;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+.slide {
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+  padding: 1em;
+  margin: 1em;
+}
 
 /* ==========================================================================
    Helper classes
