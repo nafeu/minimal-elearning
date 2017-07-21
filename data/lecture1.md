@@ -1,8 +1,8 @@
 ---
 title: "Lecture 1 - Introduction"
-author: "Example Lecturer"
+author: "Nafeu Nasir"
 date: 2017-1-1
-math: on
+math: off
 ---
 
 # Lecture 1 - Intro
@@ -15,6 +15,12 @@ $$ a = b $$
 
 +++
 
-# Part
+# Part 1
 
-Lets begin
+???
+  - This is the answer
+  - no THIS is the answer
+  - no this is definitely the answer
+  - [A] Just kidding this one is the answer
+  - [E] This is the explanation as to why it happened
+  - [R] Here is a reference

@@ -29,7 +29,7 @@ $(document).ready(function(){
     meta.append(createMeta(front));
 
     htmlArray.forEach(function(slide, index){
-      content.append(createSlide(slide, index));
+      content.append(createSlide(processQuizzes(slide), index));
     });
 
     displaySlide();
@@ -91,4 +91,13 @@ function loadMathJax() {
     console.log( jqxhr.status ); // 200
     console.log( "MathJax load was performed." );
   });
+}
+
+function processQuizzes(slide) {
+  if (/\?\?\?/.test(slide)) {
+    return slide.replace(/<p>\?\?\?<\/p>\n<ul>([\s\S]*?)<\/ul>/, function(a, b){
+      return "<p>Quiz goes here</p>";
+    });
+  }
+  return slide;
 }
