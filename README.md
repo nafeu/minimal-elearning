@@ -1,6 +1,6 @@
-# Syntax Learning Mockup
+# Minimal eLearning
 
-A mockup of an e-learning website which utilizes markdown files and parses them into lecture slides with interactive quizzes
+A proof-of-concept eLearning solution which utilizes markdown files and parses them into lecture slides with interactive quizzes
 
 # Features
 
