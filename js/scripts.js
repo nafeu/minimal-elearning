@@ -50,10 +50,16 @@ $(document).ready(function(){
     }
   });
 
+  $(window).resize(function(){
+    $(".slide").css("min-height", $(window).height() - 90);
+  });
+
 });
 
 function createSlide(slide, index) {
-  return $("<div>", {class: "slide", id: "slide-"+index}).html(slide);
+  return $("<div>", {class: "slide", id: "slide-"+index})
+    .css("min-height", $(window).height() - 90)
+    .html(slide);
 }
 
 function createMeta(meta) {
@@ -107,13 +113,13 @@ function generateQuiz(data) {
 
   var html = $(data),
       question = $("<div>", {class: "quiz-panel quiz-question"}),
-      questionBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-question active"}).text("[ question ]"),
+      questionBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-question active"}).text("question"),
       responses = $("<div>", {class: "quiz-responses"}),
       responsesArray = [],
       explanation = $("<div>", {class: "quiz-panel quiz-explanation hidden"}),
-      explanationBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-explanation"}).text("[ explanation ]"),
+      explanationBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-explanation"}).text("explanation"),
       reference = $("<div>", {class: "quiz-panel quiz-reference hidden"}),
-      referenceBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-reference"}).text("[ reference ]"),
+      referenceBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-reference"}).text("reference"),
       panels = $("<div>", {class: "quiz-panels"}),
       notice = $("<div>", {class: "quiz-notice"}),
       nav = $("<div>", {class: "quiz-nav"}),

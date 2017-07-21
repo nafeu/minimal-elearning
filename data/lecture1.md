@@ -9,9 +9,9 @@ math: off
 
 Welcome to the introductory lecture, this is a test of the markdown parsing.
 
-## MathJax
+## MathJax support
 
-$$ a = b $$
+Enable math in `lecture1.md` to render $$ a = b $$
 
 +++
 
