@@ -3,6 +3,7 @@ var body,
     htmlArray,
     slideIndex = 0,
     maxSlideIndex,
+    mathJaxCdn = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
     converter = new showdown.Converter();
 
 $(document).ready(function(){
@@ -10,31 +11,41 @@ $(document).ready(function(){
   // Selectors
   body = $("body");
   main = $("#main");
+  meta = $("#meta");
+  content = $("#content");
 
   // Markdown parsing logic
   $.get('data/lecture1.md').done(function(data){
-    var html = converter.makeHtml(data);
+
+    var front = jsyaml.loadFront(data);
+    var html = converter.makeHtml(front.__content);
     htmlArray = html.split("\n<p>+++</p>\n");
     maxSlideIndex = htmlArray.length - 1;
 
-    console.log(htmlArray);
+    if (front.math) {
+      if (front.math == 'on') loadMathJax();
+    }
+
+    meta.append(createMeta(front));
 
     htmlArray.forEach(function(slide, index){
-      main.append(createSlide(slide, index));
+      content.append(createSlide(slide, index));
     });
 
     displaySlide();
+
   });
 
   // Keyboard inputs
   $(this).keydown(function(e){
     e = e || window.event;
-    e.preventDefault();
     if (e.keyCode == '37') {
-       prevSlide();
+      e.preventDefault();
+      prevSlide();
     }
     else if (e.keyCode == '39') {
-       nextSlide();
+      e.preventDefault();
+      nextSlide();
     }
   });
 
@@ -42,6 +53,15 @@ $(document).ready(function(){
 
 function createSlide(slide, index) {
   return $("<div>", {class: "slide", id: "slide-"+index}).html(slide);
+}
+
+function createMeta(meta) {
+  var out = $("<div>", {class: "meta"});
+  var innerHTML = "<span class='meta-title'>" + meta.title + "</span> by ";
+  innerHTML += meta.author + " // ";
+  innerHTML += meta.date.toISOString().slice(0, 10);
+  out.html(innerHTML);
+  return out;
 }
 
 function displaySlide() {
@@ -63,4 +83,12 @@ function prevSlide() {
     displaySlide();
   }
   return slideIndex;
+}
+
+function loadMathJax() {
+  $.getScript( mathJaxCdn, function( data, textStatus, jqxhr ) {
+    console.log( textStatus ); // Success
+    console.log( jqxhr.status ); // 200
+    console.log( "MathJax load was performed." );
+  });
 }

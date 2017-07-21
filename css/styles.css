@@ -99,11 +99,20 @@ body {
   background-color: white;
 }
 
+.meta {
+  padding: 1em;
+  font-size: 0.75em;
+  opacity: 0.75;
+}
+
+.meta-title {
+  font-weight: bold;
+}
+
 .slide {
   border: 1px solid #bdc3c7;
   border-radius: 5px;
   padding: 1em;
-  margin: 1em;
   display: none;
 }
 
