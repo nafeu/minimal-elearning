@@ -116,6 +116,42 @@ body {
   display: none;
 }
 
+.hidden {
+  display: none;
+}
+
+.quiz-nav-btn {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 0.5em 0 0.5em;
+  opacity: 0.25;
+}
+
+.quiz-nav-btn:first-child {
+  padding-left: 0;
+}
+
+.quiz-nav {
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.quiz-nav-btn:active {
+  opacity: 0.5;
+}
+
+.quiz-question-text {
+  font-size: 1.5em;
+}
+
+.active {
+  opacity: 1;
+}
+
+.quiz-response {
+  cursor: pointer;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
