@@ -62,6 +62,7 @@ $(document).ready(function(){
     meta.append(createMeta(front));
 
     htmlArray.forEach(function(slide, index){
+      slide = slide.replace("<p>+++</p>", "");
       content.append(createSlide(processSlide(slide), index));
     });
 
@@ -158,9 +159,9 @@ function generateQuiz(data) {
       out = $("<div>", {class: "quiz-wrapper"}),
       quizId = quizCounter++;
 
-  questionBtn.attr("onclick", "switchQuizPanel(0, 'question')");
-  explanationBtn.attr("onclick", "switchQuizPanel(0, 'explanation')");
-  referenceBtn.attr("onclick", "switchQuizPanel(0, 'reference')");
+  questionBtn.attr("onclick", "switchQuizPanel('" + quizId + "', 'question')");
+  explanationBtn.attr("onclick", "switchQuizPanel('" + quizId + "', 'explanation')");
+  referenceBtn.attr("onclick", "switchQuizPanel('" + quizId + "', 'reference')");
 
   html.children().each(function(index, item){
     var itemContent = $(item).html();

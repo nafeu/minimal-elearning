@@ -27,3 +27,12 @@ Enable math in `lecture1.md` to render $$ a = b $$
 - 14
 
 +++
+
+# Ask a True/False Question
+
+???
+- q. Is this true or false?
+- a. True
+- e. Well you really only had a 50/50 chance.
+- r. Why don't you [google](http://google.ca) it.
+- False
