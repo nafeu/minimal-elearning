@@ -13,8 +13,6 @@ Welcome to the introductory lecture, this is a test of the markdown parsing.
 
 Enable math in `lecture1.md` to render $$ a = b $$
 
-$$ var a = 15 $$
-
 +++
 
 # This is another topic
@@ -29,7 +27,3 @@ $$ var a = 15 $$
 - 14
 
 +++
-
-# This is some other shit
-
-asdfasdfsa

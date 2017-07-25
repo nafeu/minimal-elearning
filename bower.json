@@ -1,0 +1,31 @@
+{
+  "name": "minimal-elearning",
+  "homepage": "https://github.com/nafeu/minimal-elearning",
+  "authors": [
+    "Nafeu Nasir <nafeu.nasir@gmail.com>"
+  ],
+  "description": "minimal eLearning solution based on md files",
+  "main": "index.html",
+  "keywords": [
+    "elearning",
+    "markdown",
+    "quiz"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "flexboxgrid": "^6.3.2",
+    "showdown": "^1.7.1",
+    "github-markdown-css": "^2.8.0",
+    "components-font-awesome": "^4.7.0",
+    "roboto-fontface": "^0.8.0"
+  }
+}
