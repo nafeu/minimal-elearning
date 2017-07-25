@@ -13,19 +13,23 @@ Welcome to the introductory lecture, this is a test of the markdown parsing.
 
 Enable math in `lecture1.md` to render $$ a = b $$
 
+$$ var a = 15 $$
+
 +++
 
-# Part 1
+# This is another topic
 
 ???
-  - [Q]
-    What is the answer to this question?
-  - [A]
-    Just kidding this one is the answer
-  - [E]
-    This is the explanation as to why it happened
-  - [R]
-    Here is a reference
-  - This is the answer
-  - no THIS is the answer
-  - no this is definitely the answer
+- q. How many hours are in a day?
+- a. 24
+- e. This is due to the Earth's rotation
+- r. Read about it at [Wikipedia](http://wikipedia.com)
+- 12
+- 27
+- 14
+
++++
+
+# This is some other shit
+
+asdfasdfsa
