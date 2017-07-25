@@ -90,9 +90,31 @@ $(document).ready(function(){
 });
 
 function createSlide(slide, index) {
-  return $("<div>", {class: "slide", id: "slide-"+index})
+  var out = $("<div>", {class: "slide", id: "slide-"+index})
     .css("min-height", $(window).height() - 90)
     .html(slide);
+  var pageNav = $("<div>", {class: "page-nav"})
+    .append(
+      $("<div>", {
+        class: "page-nav-btn page-nav-prev",
+        onclick: "prevSlide()"
+      })
+        .append('<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>')
+    )
+    .append(
+      $("<div>", {class: "page-nav-btn page-position"})
+        .append(index)
+    )
+    .append(
+      $("<div>", {
+        class: "page-nav-btn page-nav-next",
+        onclick: "nextSlide()"
+      })
+        .append('<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>')
+    );
+  out.append(pageNav);
+  return out;
+
 }
 
 function createMeta(meta) {
