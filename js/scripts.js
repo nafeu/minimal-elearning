@@ -245,14 +245,17 @@ function createQuizAnswerExplanation(content) {
 
 function selectResponse(quizId, answer, index) {
   var quizNotice = $("#quiz-" + quizId + " .quiz-notice");
+  var quizPanel = $("#quiz-" + quizId + " .quiz-question");
   if (answer) {
     quizNotice
       .text(quizTools.getCorrectMessage())
       .css("background-color", uiTools.colors.green);
+    quizPanel.css("border-color", uiTools.colors.green);
   } else {
     quizNotice
       .text(quizTools.getIncorrectMessage())
       .css("background-color", uiTools.colors.red);
+    quizPanel.css("border-color", uiTools.colors.red);
   }
   quizNotice.css("color", uiTools.colors.white);
   $("#quiz-" + quizId + " .quiz-response").removeClass("response-selected");
