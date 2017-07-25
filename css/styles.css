@@ -121,8 +121,8 @@ body {
   display: none;
 }
 
-.quiz-panel {
-  margin-top: 0.25em;
+.opacity-75 {
+  opacity: 0.75;
 }
 
 .quiz-nav-btn {
@@ -165,6 +165,11 @@ body {
   color: white;
 }
 
+.quiz-answer-explanation {
+  font-size: 1.5em;
+  margin: 1em;
+}
+
 .quiz-reference {
   border-left: 5px solid #8e44ad;
   padding-left: 0.5em;
@@ -181,10 +186,10 @@ body {
   color: white;
 }
 
-
 .quiz-nav {
   display: inline-block;
-  margin-bottom: 5px;
+  margin-top: 0.25em;
+  margin-bottom: 1em;
 }
 
 .quiz-nav-btn:active {

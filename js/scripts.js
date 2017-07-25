@@ -28,7 +28,7 @@ var quizTools = {
   getIncorrectMessage: function(){
     return this.incorrectMessages[Math.floor(Math.random()*this.incorrectMessages.length)];
   }
-}
+};
 
 var uiTools = {
   colors: {
@@ -37,7 +37,7 @@ var uiTools = {
     green: "#2ecc71",
     white: "white"
   }
-}
+};
 
 $(document).ready(function(){
 
@@ -149,7 +149,7 @@ function generateQuiz(data) {
       responses = $("<div>", {class: "quiz-responses"}),
       responsesArray = [],
       explanation = $("<div>", {class: "quiz-panel quiz-explanation hidden"}),
-      explanationBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-explanation"}).text("explanation"),
+      explanationBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-explanation"}).text("answer explanation"),
       reference = $("<div>", {class: "quiz-panel quiz-reference hidden"}),
       referenceBtn = $("<div>", {class: "quiz-nav-btn quiz-nav-btn-reference"}).text("reference"),
       panels = $("<div>", {class: "quiz-panels"}),
@@ -171,6 +171,9 @@ function generateQuiz(data) {
           .append(itemContent.substring(indexOffset)));
     } else if (itemContent.indexOf('a. ') !== -1) { // answer
       responsesArray.push(createQuizResponse(quizId, itemContent.substring(indexOffset), true, index));
+      explanation
+        .append($("<p>", {class: "opacity-75"}).text("Answer:"))
+        .append(createQuizAnswerExplanation(itemContent.substring(indexOffset)));
     } else if (itemContent.indexOf('e. ') !== -1) { // explanation
       explanation.append(itemContent.substring(indexOffset));
     } else if (itemContent.indexOf('r. ') !== -1) { // reference
@@ -192,13 +195,16 @@ function generateQuiz(data) {
 
   panels
     .append(question)
-    .append(explanation)
-    .append(reference);
+    .append(explanation);
 
   nav
     .append(questionBtn)
-    .append(explanationBtn)
-    .append(referenceBtn);
+    .append(explanationBtn);
+
+  if (reference.children().length > 0) {
+    panels.append(reference);
+    nav.append(referenceBtn);
+  }
 
   out
     .attr('id', 'quiz-' + quizId)
@@ -227,6 +233,13 @@ function createQuizResponse(quizId, response, answer, index) {
     "data-response-index": index,
     "type": "radio",
   }).html(response);
+  return out;
+}
+
+function createQuizAnswerExplanation(content) {
+  var out = $("<div>", {
+    "class": "quiz-answer-explanation"
+  }).html(content);
   return out;
 }
 

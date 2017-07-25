@@ -22,8 +22,8 @@ $$ var a = 15 $$
 ???
 - q. How many hours are in a day?
 - a. 24
-- e. This is due to the Earth's rotation
-- r. Read about it at [Wikipedia](http://wikipedia.com)
+- e. This is due to the earth's rotation silly.
+- r. Why don't you [google](http://google.ca) it.
 - 12
 - 27
 - 14
