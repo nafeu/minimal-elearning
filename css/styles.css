@@ -98,6 +98,8 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: white;
   padding: 0.5em;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .meta {
@@ -115,6 +117,7 @@ body {
   border-radius: 5px;
   padding: 1.5em;
   display: none;
+  padding-bottom: 3.5em;
 }
 
 .hidden {
@@ -263,10 +266,43 @@ body {
   cursor: pointer;
   font-size: 1em;
   padding: 0.25em;
+  margin: 0 0.25em 0 0.25em;
+}
+
+.page-nav-position-selection {
+  width: auto;
+  border-radius: 5px;
+  border: 1px solid #bdc3c7;
+  padding: 2px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.page-nav-first:hover,
+.page-nav-prev:hover,
+.page-nav-next:hover,
+.page-nav-last:hover {
+  opacity: 0.25;
 }
 
 .slide {
   position: relative;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+input {
+  border-width:0px;
+  border:none;
 }
 
 /* ==========================================================================

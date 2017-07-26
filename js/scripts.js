@@ -73,11 +73,11 @@ $(document).ready(function(){
   // Keyboard inputs
   $(this).keydown(function(e){
     e = e || window.event;
-    if (e.keyCode == '37') {
+    if (e.keyCode == '219') {
       e.preventDefault();
       prevSlide();
     }
-    else if (e.keyCode == '39') {
+    else if (e.keyCode == '221') {
       e.preventDefault();
       nextSlide();
     }
@@ -96,21 +96,44 @@ function createSlide(slide, index) {
   var pageNav = $("<div>", {class: "page-nav"})
     .append(
       $("<div>", {
+        class: "page-nav-btn page-nav-first",
+        onclick: "firstSlide()"
+      })
+        .append('<i class="fa fa-angle-double-left" aria-hidden="true"></i>')
+    )
+    .append(
+      $("<div>", {
         class: "page-nav-btn page-nav-prev",
         onclick: "prevSlide()"
       })
-        .append('<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>')
+        .append('<i class="fa fa-angle-left" aria-hidden="true"></i>')
     )
     .append(
       $("<div>", {class: "page-nav-btn page-position"})
-        .append(index)
+        .append($("<input>", {
+          class: "page-nav-position-selection",
+          type: "number",
+          value: (index + 1),
+          name: (index + 1),
+          min: 1,
+          max: maxSlideIndex + 1,
+          onkeypress: "goToSlide(event, this)"
+        }))
+        .append(" / " + (maxSlideIndex + 1))
     )
     .append(
       $("<div>", {
         class: "page-nav-btn page-nav-next",
         onclick: "nextSlide()"
       })
-        .append('<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>')
+        .append('<i class="fa fa-angle-right" aria-hidden="true"></i>')
+    )
+    .append(
+      $("<div>", {
+        class: "page-nav-btn page-nav-last",
+        onclick: "lastSlide()"
+      })
+        .append('<i class="fa fa-angle-double-right" aria-hidden="true"></i>')
     );
   out.append(pageNav);
   return out;
@@ -136,6 +159,7 @@ function nextSlide() {
     slideIndex++;
     displaySlide();
   }
+  console.log("N: Current slide: ", slideIndex);
   return slideIndex;
 }
 
@@ -143,6 +167,32 @@ function prevSlide() {
   if (slideIndex > 0) {
     slideIndex--;
     displaySlide();
+  }
+  console.log("P: Current slide: ", slideIndex);
+  return slideIndex;
+}
+
+function firstSlide() {
+  slideIndex = 0;
+  displaySlide();
+  console.log("F: Current slide: ", slideIndex);
+  return slideIndex;
+}
+
+function lastSlide() {
+  slideIndex = maxSlideIndex;
+  displaySlide();
+  console.log("L: Current slide: ", slideIndex);
+  return slideIndex;
+}
+
+function goToSlide(event, element) {
+  var index = parseInt(element.value) - 1;
+  if ((event.which == 13) && (index >= 0) && (index <= maxSlideIndex)) {
+    element.value = element.name;
+    slideIndex = index;
+    displaySlide();
+    console.log("G: Current slide: ", slideIndex);
   }
   return slideIndex;
 }
