@@ -1,17 +1,24 @@
 ---
-title: "Lecture 1 - Introduction"
+title: "Sample Lesson"
 author: "Nafeu Nasir"
 date: 2017-1-1
-math: off
+math: on
 ---
 
 # Lecture 1 - Intro
 
-Welcome to the introductory lecture, this is a test of the markdown parsing.
+This is a test lecture, today we will learn about the following topics:
+
+- [topic 1](https://www.spss-tutorials.com/spss-syntax-beginners-tutorial/)
+- topic 2
+- topic 3
+- topic 4
 
 ## MathJax support
 
 Enable math in `lecture1.md` to render $$ a = b $$
+
+$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
 +++
 
@@ -19,7 +26,10 @@ Enable math in `lecture1.md` to render $$ a = b $$
 
 ???
 - q. How many hours are in a day?
-- a. 24
+- a.
+  <img
+  onclick="window.open('http://phrakture.com/storage/uploads/storage_Ttbpy4.png', '_blank')"
+  src='http://phrakture.com/storage/uploads/storage_Ttbpy4.png'/>
 - e. This is due to the earth's rotation silly.
 - r. Why don't you [google](http://google.ca) it.
 - 12

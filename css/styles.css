@@ -305,6 +305,15 @@ input {
   border:none;
 }
 
+#content img {
+  text-align: center;
+  max-height: 300px;
+  display: block;
+  margin: auto;
+  cursor: pointer;
+  border: 1px solid #BDC3C7;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */

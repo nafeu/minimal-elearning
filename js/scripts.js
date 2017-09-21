@@ -48,7 +48,7 @@ $(document).ready(function(){
   content = $("#content");
 
   // Markdown parsing logic
-  $.get('data/lecture1.md').done(function(data){
+  $.get(lessonPath).done(function(data){
 
     var front = jsyaml.loadFront(data);
     var html = converter.makeHtml(front.__content);
@@ -85,6 +85,11 @@ $(document).ready(function(){
 
   $(window).resize(function(){
     $(".slide").css("min-height", $(window).height() - 90);
+  });
+
+  $("img").on('click', function(){
+    console.log("CLICKED...");
+    window.open($(this).attr('src'), '_blank');
   });
 
 });

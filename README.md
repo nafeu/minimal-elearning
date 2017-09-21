@@ -17,6 +17,7 @@ A proof-of-concept eLearning solution which utilizes markdown files and parses t
 git clone https://github.com/nafeu/minimal-elearning.git
 cd minimal-elearning
 bower install
+...
 ```
 
 Run your choice of development server out of the root directory.
