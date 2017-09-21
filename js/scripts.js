@@ -1,5 +1,6 @@
 var body,
     main,
+    front,
     htmlArray,
     slideIndex = 0,
     maxSlideIndex,
@@ -50,7 +51,7 @@ $(document).ready(function(){
   // Markdown parsing logic
   $.get(lessonPath).done(function(data){
 
-    var front = jsyaml.loadFront(data);
+    front = jsyaml.loadFront(data);
     var html = converter.makeHtml(front.__content);
     htmlArray = html.split("\n<p>+++</p>\n");
     maxSlideIndex = htmlArray.length - 1;
@@ -216,7 +217,9 @@ function processSlide(slide) {
       return generateQuiz(match);
     });
   }
-  return slide;
+  return slide.replace("<intro></intro>", function(html, match){
+    return generateIntro(front);
+  });
 }
 
 function generateQuiz(data) {
@@ -291,6 +294,15 @@ function generateQuiz(data) {
     .append(panels);
 
   return $("<div>").append(out).html();
+}
+
+function generateIntro(meta) {
+  var out = $("<div>", {class: "intro-container"});
+  var title = $("<div>", {class: "intro-title"}).text(meta.title);
+  var author = $("<div>", {class: "intro-author"}).text(meta.author);
+  out.append(title);
+  out.append(author);
+  return out.prop('outerHTML');
 }
 
 function switchQuizPanel(quizId, panel) {

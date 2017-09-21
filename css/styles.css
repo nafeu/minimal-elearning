@@ -314,6 +314,21 @@ input {
   border: 1px solid #BDC3C7;
 }
 
+.intro-container {
+  margin-top: 140px;
+}
+
+.intro-title {
+  text-align: center;
+  font-size: 4em;
+}
+
+.intro-author {
+  text-align: center;
+  font-size: 3em;
+  font-weight: 100;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */

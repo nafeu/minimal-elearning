@@ -23,9 +23,9 @@
     </div>
     <?php
       if (isset($_GET['lesson'])) {
-        echo "<script>var lessonPath = 'data/" + $_GET['lesson'] + ".md'</script>";
+        echo "<script>var lessonPath = 'data/" . $_GET['lesson'] . ".md';</script>";
       } else {
-        echo "<script>var lessonPath = 'sample-lesson.md'</script>";
+        echo "<script>var lessonPath = 'sample-lesson.md';</script>";
       }
     ?>
     <script src="js/scripts.js"></script>
