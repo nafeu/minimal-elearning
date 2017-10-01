@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/showdown/dist/showdown.min.js"></script>
+    <script src="bower_components/showdown-table/dist/showdown-table.min.js"></script>
     <script src="lib/js-yaml-front-client.min.js"></script>
     <script src="lib/jquery.plugins.js"></script>
   </head>

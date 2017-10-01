@@ -6,7 +6,7 @@ var body,
     maxSlideIndex,
     quizCounter = 0,
     mathJaxCdn = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
-    converter = new showdown.Converter();
+    converter = new showdown.Converter({extensions: ['table']});
 
 var quizTools = {
   correctMessages: [
