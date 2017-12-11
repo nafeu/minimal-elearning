@@ -6,7 +6,8 @@ var body,
     maxSlideIndex,
     quizCounter = 0,
     mathJaxCdn = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
-    converter = new showdown.Converter({extensions: ['table']});
+    converter = new showdown.Converter({extensions: ['table']}),
+    lessonPath = getParameterByName('lesson') ? ('data/' + getParameterByName('lesson') + '.md') : 'sample-lesson.md';
 
 var quizTools = {
   correctMessages: [
@@ -361,4 +362,14 @@ function shuffle(a) {
     a[i - 1] = a[j];
     a[j] = x;
   }
+}
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }

@@ -22,13 +22,6 @@
       <div id="meta" class="box"></div>
       <div id="content" class="box markdown-body"></div>
     </div>
-    <?php
-      if (isset($_GET['lesson'])) {
-        echo "<script>var lessonPath = 'data/" . $_GET['lesson'] . ".md';</script>";
-      } else {
-        echo "<script>var lessonPath = 'sample-lesson.md';</script>";
-      }
-    ?>
     <script src="js/scripts.js"></script>
   </body>
 </html>
