@@ -66,6 +66,10 @@ $(document).ready(function(){
     htmlArray = html.split("\n<p>+++</p>\n");
     maxSlideIndex = htmlArray.length - 1;
 
+    if (front.title) {
+      document.title = front.title + " | Minimal eLearning"
+    }
+
     if (front.math) {
       if (front.math == 'on') loadMathJax();
     }
@@ -101,7 +105,6 @@ $(document).ready(function(){
   });
 
   $("img").on('click', function(){
-    console.log("CLICKED...");
     window.open($(this).attr('src'), '_blank');
   });
 
@@ -161,7 +164,7 @@ function createSlide(slide, index) {
 function createMeta(meta) {
   var out = $("<div>", {class: "meta"});
   var innerHTML = "<span class='meta-title'>" + meta.title + "</span> by ";
-  innerHTML += meta.author + " // ";
+  innerHTML += meta.author + ", ";
   innerHTML += meta.date.toISOString().slice(0, 10);
   out.html(innerHTML);
   return out;
@@ -177,7 +180,6 @@ function nextSlide() {
     slideIndex++;
     displaySlide();
   }
-  console.log("N: Current slide: ", slideIndex);
   return slideIndex;
 }
 
@@ -186,21 +188,18 @@ function prevSlide() {
     slideIndex--;
     displaySlide();
   }
-  console.log("P: Current slide: ", slideIndex);
   return slideIndex;
 }
 
 function firstSlide() {
   slideIndex = 0;
   displaySlide();
-  console.log("F: Current slide: ", slideIndex);
   return slideIndex;
 }
 
 function lastSlide() {
   slideIndex = maxSlideIndex;
   displaySlide();
-  console.log("L: Current slide: ", slideIndex);
   return slideIndex;
 }
 
@@ -210,7 +209,6 @@ function goToSlide(event, element) {
     element.value = element.name;
     slideIndex = index;
     displaySlide();
-    console.log("G: Current slide: ", slideIndex);
   }
   return slideIndex;
 }
