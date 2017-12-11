@@ -5,9 +5,11 @@ var body,
     slideIndex = 0,
     maxSlideIndex,
     quizCounter = 0,
+    lessonName,
+    lessonPath,
     mathJaxCdn = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
     converter = new showdown.Converter({extensions: ['table']}),
-    lessonPath = getParameterByName('lesson') ? ('data/' + getParameterByName('lesson') + '.md') : 'sample-lesson.md';
+    exampleLessonPath = 'example.memd'
 
 var quizTools = {
   correctMessages: [
@@ -49,6 +51,13 @@ $(document).ready(function(){
   meta = $("#meta");
   content = $("#content");
 
+  if (window.location.hash && (window.location.hash.length > 1)) {
+    lessonName = window.location.hash.substring(1)
+    lessonPath = ('memd/' + lessonName + '.memd')
+  } else {
+    lessonPath = exampleLessonPath
+  }
+
   // Markdown parsing logic
   $.get(lessonPath).done(function(data){
 
@@ -70,6 +79,8 @@ $(document).ready(function(){
 
     displaySlide();
 
+  }).fail(function() {
+    body.html("<h2>Presentation named <u>" + lessonName + "</u> could not be found.</h2>");
   });
 
   // Keyboard inputs
