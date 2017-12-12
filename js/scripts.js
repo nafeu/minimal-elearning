@@ -86,6 +86,8 @@ $(document).ready(function(){
       content.append(createSlide(processSlide(slide), index));
     });
 
+    loadSlidePosition();
+    saveSlidePosition();
     displaySlide();
 
   }).fail(function() {
@@ -143,7 +145,7 @@ function createSlide(slide, index) {
           name: (index + 1),
           min: 1,
           max: maxSlideIndex + 1,
-          onkeypress: "goToSlide(event, this)"
+          onkeypress: "goToSlideByElement(event, this)"
         }))
         .append(" of " + (maxSlideIndex + 1))
     )
@@ -183,6 +185,7 @@ function displaySlide() {
 function nextSlide() {
   if (slideIndex < maxSlideIndex) {
     slideIndex++;
+    saveSlidePosition()
     displaySlide();
   }
   return slideIndex;
@@ -191,6 +194,7 @@ function nextSlide() {
 function prevSlide() {
   if (slideIndex > 0) {
     slideIndex--;
+    saveSlidePosition()
     displaySlide();
   }
   return slideIndex;
@@ -198,24 +202,35 @@ function prevSlide() {
 
 function firstSlide() {
   slideIndex = 0;
+  saveSlidePosition()
   displaySlide();
   return slideIndex;
 }
 
 function lastSlide() {
   slideIndex = maxSlideIndex;
+  saveSlidePosition()
   displaySlide();
   return slideIndex;
 }
 
-function goToSlide(event, element) {
+function goToSlideByElement(event, element) {
   var index = parseInt(element.value) - 1;
   if ((event.which == 13) && (index >= 0) && (index <= maxSlideIndex)) {
     element.value = element.name;
     slideIndex = index;
+    saveSlidePosition()
     displaySlide();
   }
   return slideIndex;
+}
+
+function goToSlide(index) {
+  if (index <= maxSlideIndex) {
+    slideIndex = index;
+    saveSlidePosition()
+    displaySlide();
+  }
 }
 
 function loadMathJax() {
@@ -386,4 +401,15 @@ function getParameterByName(name, url) {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function loadSlidePosition() {
+  var position = window.localStorage.getItem(lessonPath)
+  if (position && (slideIndex <= maxSlideIndex)) {
+    slideIndex = parseInt(position)
+  }
+}
+
+function saveSlidePosition() {
+  window.localStorage.setItem(lessonPath, slideIndex);
 }
