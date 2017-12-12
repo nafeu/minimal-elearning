@@ -96,7 +96,7 @@ h1 {
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: white;
+  background-color: #ecf0f1;
   padding: 0.5em;
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -272,7 +272,7 @@ body {
 .page-nav-position-selection {
   width: auto;
   border-radius: 5px;
-  border: 1px solid #bdc3c7;
+  background-color: #ecf0f1;
   padding: 2px;
   cursor: pointer;
   text-align: center;
@@ -281,12 +281,15 @@ body {
 .page-nav-first:hover,
 .page-nav-prev:hover,
 .page-nav-next:hover,
-.page-nav-last:hover {
+.page-nav-last:hover,
+.page-nav-position-selection:hover {
   opacity: 0.25;
 }
 
 .slide {
   position: relative;
+  background-color: white;
+  border: none;
 }
 
 input::-webkit-outer-spin-button,

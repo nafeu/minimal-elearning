@@ -7,9 +7,10 @@ var body,
     quizCounter = 0,
     lessonName,
     lessonPath,
+    customBackgroundColor,
     mathJaxCdn = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
     converter = new showdown.Converter({extensions: ['table']}),
-    exampleLessonPath = 'example.memd'
+    exampleLessonPath = 'example.memd';
 
 var quizTools = {
   correctMessages: [
@@ -72,6 +73,10 @@ $(document).ready(function(){
 
     if (front.math) {
       if (front.math == 'on') loadMathJax();
+    }
+
+    if (front.background) {
+      body.css("background", front.background)
     }
 
     meta.append(createMeta(front));
@@ -140,7 +145,7 @@ function createSlide(slide, index) {
           max: maxSlideIndex + 1,
           onkeypress: "goToSlide(event, this)"
         }))
-        .append(" / " + (maxSlideIndex + 1))
+        .append(" of " + (maxSlideIndex + 1))
     )
     .append(
       $("<div>", {
