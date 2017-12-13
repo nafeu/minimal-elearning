@@ -7,6 +7,7 @@ var body,
     quizCounter = 0,
     lessonName,
     lessonPath,
+    title = 'Minimal eLearning',
     customBackgroundColor,
     mathJaxCdn = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
     converter = new showdown.Converter({extensions: ['table']}),
@@ -53,7 +54,7 @@ $(document).ready(function(){
   content = $("#content");
 
   if (window.location.hash && (window.location.hash.length > 1)) {
-    lessonName = window.location.hash.substring(1)
+    lessonName = window.location.hash.substring(1).split("?")[0]
     lessonPath = ('memd/' + lessonName + '.memd')
   } else {
     lessonPath = exampleLessonPath
@@ -68,7 +69,8 @@ $(document).ready(function(){
     maxSlideIndex = htmlArray.length - 1;
 
     if (front.title) {
-      document.title = front.title + " | Minimal eLearning"
+      title = front.title + " | Minimal eLearning"
+      document.title = title
     }
 
     if (front.math) {
@@ -86,7 +88,14 @@ $(document).ready(function(){
       content.append(createSlide(processSlide(slide), index));
     });
 
-    loadSlidePosition();
+    var querySlide = getParameterByName('slide')
+
+    if (querySlide && ((parseInt(querySlide) - 1) <= maxSlideIndex) && ((parseInt(querySlide) - 1) >= 0)) {
+      slideIndex = querySlide - 1
+    } else {
+      loadSlidePosition();
+      updateQueryString('slide', slideIndex + 1, true);
+    }
     saveSlidePosition();
     displaySlide();
 
@@ -185,7 +194,8 @@ function displaySlide() {
 function nextSlide() {
   if (slideIndex < maxSlideIndex) {
     slideIndex++;
-    saveSlidePosition()
+    updateQueryString('slide', slideIndex + 1, true);
+    saveSlidePosition();
     displaySlide();
   }
   return slideIndex;
@@ -194,7 +204,8 @@ function nextSlide() {
 function prevSlide() {
   if (slideIndex > 0) {
     slideIndex--;
-    saveSlidePosition()
+    updateQueryString('slide', slideIndex + 1, true);
+    saveSlidePosition();
     displaySlide();
   }
   return slideIndex;
@@ -202,14 +213,16 @@ function prevSlide() {
 
 function firstSlide() {
   slideIndex = 0;
-  saveSlidePosition()
+  updateQueryString('slide', slideIndex + 1, true);
+  saveSlidePosition();
   displaySlide();
   return slideIndex;
 }
 
 function lastSlide() {
   slideIndex = maxSlideIndex;
-  saveSlidePosition()
+  updateQueryString('slide', slideIndex + 1, true);
+  saveSlidePosition();
   displaySlide();
   return slideIndex;
 }
@@ -219,7 +232,8 @@ function goToSlideByElement(event, element) {
   if ((event.which == 13) && (index >= 0) && (index <= maxSlideIndex)) {
     element.value = element.name;
     slideIndex = index;
-    saveSlidePosition()
+    updateQueryString('slide', slideIndex + 1, true);
+    saveSlidePosition();
     displaySlide();
   }
   return slideIndex;
@@ -228,7 +242,8 @@ function goToSlideByElement(event, element) {
 function goToSlide(index) {
   if (index <= maxSlideIndex) {
     slideIndex = index;
-    saveSlidePosition()
+    updateQueryString('slide', slideIndex + 1, false);
+    saveSlidePosition();
     displaySlide();
   }
 }
@@ -413,3 +428,43 @@ function loadSlidePosition() {
 function saveSlidePosition() {
   window.localStorage.setItem(lessonPath, slideIndex);
 }
+
+function updateQueryString(key, value, pushState, url) {
+    var finalUrl;
+    if (!url) url = window.location.href;
+    var re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+        hash;
+
+    if (re.test(url)) {
+        if (typeof value !== 'undefined' && value !== null)
+            finalUrl = url.replace(re, '$1' + key + "=" + value + '$2$3');
+        else {
+            hash = url.split('#');
+            url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
+            if (typeof hash[1] !== 'undefined' && hash[1] !== null)
+                url += '#' + hash[1];
+            finalUrl = url;
+        }
+    }
+    else {
+        if (typeof value !== 'undefined' && value !== null) {
+            var separator = url.indexOf('?') !== -1 ? '&' : '?';
+            hash = url.split('#');
+            url = hash[0] + separator + key + '=' + value;
+            if (typeof hash[1] !== 'undefined' && hash[1] !== null)
+                url += '#' + hash[1];
+            finalUrl = url;
+        }
+        else
+            finalUrl = url;
+    }
+    if (pushState) {
+      window.history.pushState({slide: value}, title, finalUrl)
+    }
+}
+
+window.onpopstate = function(event) {
+  if (event.state.slide) {
+    goToSlide(event.state.slide - 1)
+  }
+};
