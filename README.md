@@ -47,6 +47,7 @@ Standard markdown supported.
 
 ```
 <intro></intro>
+
 +++
 ```
 
