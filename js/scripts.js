@@ -53,8 +53,9 @@ $(document).ready(function(){
   meta = $("#meta");
   content = $("#content");
 
-  if (window.location.hash && (window.location.hash.length > 1)) {
-    lessonName = window.location.hash.substring(1).split("?")[0]
+  lessonName = getParameterByName('lesson');
+
+  if (lessonName) {
     lessonPath = ('memd/' + lessonName + '.memd')
   } else {
     lessonPath = exampleLessonPath

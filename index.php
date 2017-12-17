@@ -1,3 +1,38 @@
+<?php
+
+$lessonPath = 'example.memd';
+
+if (isset($_GET['lesson'])) {
+  $lessonPath = 'memd/' . $_GET['lesson'] . '.memd';
+}
+
+$handle = fopen($lessonPath, "r");
+$delimiterCount = 2;
+$title = "Minimal eLearning";
+$description = "A Minimal eLearning lesson.";
+
+if ($handle) {
+  while ( (($line = fgets($handle)) !== false) && ($delimiterCount > 0)) {
+    if (substr($line, 0, 6) === 'title:') {
+      $title = substr($line, 8, -2);
+    }
+
+    if (substr($line, 0, 12) === 'description:') {
+      $description = substr($line, 14, -2);
+    }
+
+    if (strpos($line, '---') !== false) {
+      $delimiterCount--;
+    }
+  }
+
+  fclose($handle);
+} else {
+  echo "Error opening file.";
+}
+
+?>
+
 <!doctype html>
 <html class="no-js" lang="en">
   <head>
@@ -6,6 +41,11 @@
     <title>Minimal eLearning</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="http://phrakture.com/elearning" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="<?php echo $title; ?>" />
+    <meta property="og:description" content="<?php echo $description; ?>" />
+    <meta property="og:image" content="http://phrakture.com/elearning/opengraph-image.png" />
     <link rel="stylesheet" type="text/css" href="bower_components/roboto-fontface/css/roboto/roboto-fontface.css">
     <link rel="stylesheet" type="text/css" href="bower_components/flexboxgrid/dist/flexboxgrid.min.css">
     <link rel="stylesheet" type="text/css" href="bower_components/github-markdown-css/github-markdown.css">
