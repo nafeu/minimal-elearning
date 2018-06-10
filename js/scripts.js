@@ -101,7 +101,7 @@ $(document).ready(function(){
     displaySlide();
 
   }).fail(function() {
-    body.html("<h2>Presentation named <u>" + lessonUrl + "</u> could not be found.</h2>");
+    body.html("<h2>Presentation at <u>" + lessonUrl + "</u> could not be accessed or found.</h2>");
   });
 
   // Keyboard inputs
