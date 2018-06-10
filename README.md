@@ -1,4 +1,4 @@
-<h1><img src="http://phrakture.com/storage/uploads/githubK06f0v.png" width="72" height="72" valign="middle"/>Minimal eLearning</h1>
+<h1><img src="http://phrakture.com/images/github/minimal-elearning-icon-updated.png" width="72" height="72" valign="middle"/>Minimal eLearning</h1>
 
 A proof-of-concept eLearning solution which utilizes markdown files and parses them into lecture slides with interactive quizzes.
 

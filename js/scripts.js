@@ -5,7 +5,7 @@ var body,
     slideIndex = 0,
     maxSlideIndex,
     quizCounter = 0,
-    lessonName,
+    lessonUrl,
     lessonPath,
     title = 'Minimal eLearning',
     customBackgroundColor,
@@ -53,12 +53,12 @@ $(document).ready(function(){
   meta = $("#meta");
   content = $("#content");
 
-  lessonName = getParameterByName('lesson');
+  lessonUrl = getParameterByName('lesson');
 
-  if (lessonName) {
-    lessonPath = ('memd/' + lessonName + '.memd')
+  if (lessonUrl) {
+    lessonPath = lessonUrl;
   } else {
-    lessonPath = exampleLessonPath
+    lessonPath = exampleLessonPath;
   }
 
   // Markdown parsing logic
@@ -101,7 +101,7 @@ $(document).ready(function(){
     displaySlide();
 
   }).fail(function() {
-    body.html("<h2>Presentation named <u>" + lessonName + "</u> could not be found.</h2>");
+    body.html("<h2>Presentation named <u>" + lessonUrl + "</u> could not be found.</h2>");
   });
 
   // Keyboard inputs
