@@ -31,6 +31,19 @@
       <div id="meta" class="box"></div>
       <div id="content" class="box markdown-body"></div>
     </div>
+    <div style="display:none;" id="load-lesson" class="col-xs-12 col-sm-offset-2 col-sm-8 text-center">
+      <input id="hidden-url" type="text">
+      <img id="logo" src="img/logo.png">
+      <h3 class="url-instruction">Please enter the URL to your lesson:</h3>
+      <input id="lesson-url-input" class="url-input" type="text" placeholder="Enter lesson URL">
+      <br>
+      <div id="preview"></div>
+      <div style="display:none;" id="copy-link-btn" class="url-confirmation-btn" onclick="copyUrl()">Copy Lesson Link</div>
+      <div style="display:none;" id="launch-lesson-btn" class="url-confirmation-btn" onclick="launchLesson()">Launch Lesson</div>
+      <h4 style="display:none;" id="invalid-link">Invalid link, please enter a valid url.</h4>
+      <p class="help-text">For info on how to build presentations, please visit <a href="https://github.com/nafeu/minimal-elearning">github.com/nafeu/minimal-elearning</a></p>
+      <p class="footer">&copy; 2018 Nafeu Nasir</p>
+    </div>
     <script src="js/scripts.js"></script>
   </body>
 </html>

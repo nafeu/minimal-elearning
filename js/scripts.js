@@ -52,60 +52,65 @@ $(document).ready(function(){
   main = $("#main");
   meta = $("#meta");
   content = $("#content");
+  loadLesson = $("#load-lesson");
+  lessonUrlInput = $("#lesson-url-input");
+  launchLessonBtn = $("#launch-lesson-btn");
+  copyLinkBtn = $("#copy-link-btn");
+  invalidLink = $("#invalid-link");
+  preview = $("#preview");
 
   lessonUrl = getParameterByName('lesson');
 
   if (lessonUrl) {
-    lessonPath = lessonUrl;
-  } else {
-    lessonPath = exampleLessonPath;
-  }
+    // Markdown parsing logic
+    $.get(lessonUrl).done(function(data){
 
-  // Markdown parsing logic
-  $.get(lessonPath).done(function(data){
+      console.log("Retrieving data... (" + lessonPath + ")");
+      console.log(data);
 
-    console.log("Retrieving data... (" + lessonPath + ")");
-    console.log(data);
+      front = jsyaml.loadFront(data);
+      var html = converter.makeHtml(front.__content);
+      htmlArray = html.split("\n<p>+++</p>\n");
+      maxSlideIndex = htmlArray.length - 1;
 
-    front = jsyaml.loadFront(data);
-    var html = converter.makeHtml(front.__content);
-    htmlArray = html.split("\n<p>+++</p>\n");
-    maxSlideIndex = htmlArray.length - 1;
+      if (front.title) {
+        title = front.title + " | Minimal eLearning"
+        document.title = title
+      }
 
-    if (front.title) {
-      title = front.title + " | Minimal eLearning"
-      document.title = title
-    }
+      if (front.math) {
+        if (front.math == 'on') loadMathJax();
+      }
 
-    if (front.math) {
-      if (front.math == 'on') loadMathJax();
-    }
+      if (front.background) {
+        body.css("background", front.background)
+      }
 
-    if (front.background) {
-      body.css("background", front.background)
-    }
+      meta.append(createMeta(front));
 
-    meta.append(createMeta(front));
+      htmlArray.forEach(function(slide, index){
+        slide = slide.replace("<p>+++</p>", "");
+        content.append(createSlide(processSlide(slide), index));
+      });
 
-    htmlArray.forEach(function(slide, index){
-      slide = slide.replace("<p>+++</p>", "");
-      content.append(createSlide(processSlide(slide), index));
+      var querySlide = getParameterByName('slide')
+
+      if (querySlide && ((parseInt(querySlide) - 1) <= maxSlideIndex) && ((parseInt(querySlide) - 1) >= 0)) {
+        slideIndex = querySlide - 1
+      } else {
+        loadSlidePosition();
+        updateQueryString('slide', slideIndex + 1, true);
+      }
+      saveSlidePosition();
+      displaySlide();
+
+    }).fail(function() {
+      body.html("<h2>Presentation at <u>" + lessonUrl + "</u> could not be accessed or found.</h2>");
     });
-
-    var querySlide = getParameterByName('slide')
-
-    if (querySlide && ((parseInt(querySlide) - 1) <= maxSlideIndex) && ((parseInt(querySlide) - 1) >= 0)) {
-      slideIndex = querySlide - 1
-    } else {
-      loadSlidePosition();
-      updateQueryString('slide', slideIndex + 1, true);
-    }
-    saveSlidePosition();
-    displaySlide();
-
-  }).fail(function() {
-    body.html("<h2>Presentation at <u>" + lessonUrl + "</u> could not be accessed or found.</h2>");
-  });
+  } else {
+    body.css("background", "white");
+    loadLesson.show();
+  }
 
   // Keyboard inputs
   $(this).keydown(function(e){
@@ -120,6 +125,7 @@ $(document).ready(function(){
     }
   });
 
+  // Events
   $(window).resize(function(){
     $(".slide").css("min-height", $(window).height() - 90);
   });
@@ -128,7 +134,58 @@ $(document).ready(function(){
     window.open($(this).attr('src'), '_blank');
   });
 
+  lessonUrlInput.on('change', function(){
+    var inputUrl = lessonUrlInput.val();
+    $("#hidden-url").val(generateUrl(inputUrl));
+    $.get(inputUrl).done(function(data){
+      var front = jsyaml.loadFront(data);
+      showPreview(front);
+      copyLinkBtn.show();
+      launchLessonBtn.show();
+      invalidLink.hide();
+    }).fail(function(error){
+      copyLinkBtn.hide();
+      launchLessonBtn.hide();
+      invalidLink.show();
+      preview.hide();
+    })
+  })
+
+  launchLessonBtn.on('click', function(){
+    if (lessonUrlInput.val().length > 0) {
+      window.location.href = generateUrl(lessonUrlInput.val());
+    } else {
+      lessonUrlInput.focus();
+    }
+  })
+
 });
+
+function showPreview(data) {
+  var preview = $("#preview");
+  preview.empty();
+  preview.append("<p>Lesson details:</p>");
+  preview.append("<h2>" + data.title + "</h2>");
+  preview.append("<h3>by " + data.author + "</h3>");
+  preview.append("<h4>" + data.description + "</h4>");
+  preview.append("<p>" + data.date + "</p>");
+  preview.show();
+}
+
+function generateUrl(value) {
+  return encodeURI(window.location.href + "?lesson=" + value);
+}
+
+function copyUrl() {
+  var hiddenUrl = document.getElementById("hidden-url");
+  hiddenUrl.select();
+  document.execCommand("copy");
+  $("#copy-link-btn").text("Copied to clipboard.");
+  setTimeout(function(){
+    $("#copy-link-btn").text("Copy Lesson Link");
+  }, 2000);
+
+}
 
 function createSlide(slide, index) {
   var out = $("<div>", {class: "slide", id: "slide-"+index})

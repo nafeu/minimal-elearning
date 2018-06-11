@@ -332,6 +332,69 @@ input {
   font-weight: 100;
 }
 
+.text-center {
+  text-align: center;
+}
+
+#logo {
+  margin-top: 100px;
+}
+
+.url-instruction {
+  font-size: 1.5em;
+}
+
+.url-input {
+  font-size: 1.5em;
+  padding: 10px;
+  border: 1px solid #15957A;
+  border-radius: 5px;
+  width: 60%;
+}
+
+.url-input::placeholder {
+  color: #15957A;
+}
+
+.footer {
+  font-size: 0.8em;
+}
+
+.help-text {
+  font-size: 1.25em;
+}
+
+.url-confirmation-btn {
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1.25em;
+  display: inline-block;
+  margin: 20px 5px 0px 0px;
+  cursor: pointer;
+  transition: 200ms ease-in-out all;
+}
+
+.url-confirmation-btn:hover {
+  border-color: #15957A;
+  color: #15957A;
+}
+
+.url-confirmation-btn:active {
+  opacity: 0.5;
+}
+
+#hidden-url {
+  position: absolute;
+  left: -1000;
+  opacity: 0;
+}
+
+#preview {
+  display: block;
+  margin-top: 30px;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
