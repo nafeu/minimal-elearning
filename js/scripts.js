@@ -11,7 +11,7 @@ var body,
     customBackgroundColor,
     mathJaxCdn = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
     converter = new showdown.Converter({extensions: ['table']}),
-    exampleLessonPath = 'example.memd';
+    exampleLessonPath = './example.memd';
 
 var quizTools = {
   correctMessages: [
@@ -63,6 +63,9 @@ $(document).ready(function(){
 
   // Markdown parsing logic
   $.get(lessonPath).done(function(data){
+
+    console.log("Retrieving data... (" + lessonPath + ")");
+    console.log(data);
 
     front = jsyaml.loadFront(data);
     var html = converter.makeHtml(front.__content);
