@@ -480,14 +480,16 @@ function getParameterByName(name, url) {
 }
 
 function loadSlidePosition() {
-  var position = window.localStorage.getItem(lessonPath)
-  if (position && (slideIndex <= maxSlideIndex)) {
-    slideIndex = parseInt(position)
-  }
+  // TODO: Update and re-enable
+  // var position = window.localStorage.getItem(lessonPath)
+  // if (position && (slideIndex <= maxSlideIndex)) {
+  //   slideIndex = parseInt(position)
+  // }
 }
 
 function saveSlidePosition() {
-  window.localStorage.setItem(lessonPath, slideIndex);
+  // TODO: Update and re-enable
+  // window.localStorage.setItem(lessonPath, slideIndex);
 }
 
 function updateQueryString(key, value, pushState, url) {
