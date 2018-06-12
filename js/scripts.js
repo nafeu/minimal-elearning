@@ -117,11 +117,11 @@ $(document).ready(function(){
   // Keyboard inputs
   $(this).keydown(function(e){
     e = e || window.event;
-    if (e.keyCode == '219') {
+    if (e.keyCode == '219' || e.keyCode == '37') {
       e.preventDefault();
       prevSlide();
     }
-    else if (e.keyCode == '221') {
+    else if (e.keyCode == '221' || e.keyCode == '39') {
       e.preventDefault();
       nextSlide();
     }
@@ -139,19 +139,18 @@ $(document).ready(function(){
 
   lessonUrlInput.on('change', function(){
     var inputUrl = lessonUrlInput.val();
-    hiddenUrl.val(generateUrl(inputUrl));
-    $.get(inputUrl).done(function(data){
-      var front = jsyaml.loadFront(data);
-      showPreview(front);
-      copyLinkBtn.show();
-      launchLessonBtn.show();
-      invalidLink.hide();
-    }).fail(function(error){
-      copyLinkBtn.hide();
-      launchLessonBtn.hide();
-      invalidLink.show();
-      preview.hide();
-    })
+    if (inputUrl.length > 0) {
+      $.get(inputUrl).done(function(data){
+        var front = jsyaml.loadFront(data);
+        showPreview(front);
+        hiddenUrl.val(generateUrl(inputUrl));
+        showValidLink();
+      }).fail(function(error){
+        showInvalidLink();
+      })
+    } else {
+      showInvalidLink();
+    }
   })
 
   launchLessonBtn.on('click', function(){
@@ -163,6 +162,19 @@ $(document).ready(function(){
   })
 
 });
+
+function showValidLink() {
+  copyLinkBtn.show();
+  launchLessonBtn.show();
+  invalidLink.hide();
+}
+
+function showInvalidLink() {
+  copyLinkBtn.hide();
+  launchLessonBtn.hide();
+  invalidLink.show();
+  preview.hide();
+}
 
 function resizeContentArea() {
   $(".slide").css("min-height", $(window).height() - 90);
@@ -179,7 +191,7 @@ function showPreview(data) {
   preview.append("<h2>" + data.title + "</h2>");
   preview.append("<h3>by " + data.author + "</h3>");
   preview.append("<h4>" + data.description + "</h4>");
-  preview.append("<p>" + data.date + "</p>");
+  preview.append("<p>" + data.date.toDateString() + "</p>");
   preview.show();
 }
 
@@ -190,10 +202,10 @@ function generateUrl(value) {
 function copyUrl() {
   document.getElementById("hidden-url").select();
   document.execCommand("copy");
-  $("#copy-link-btn").text("Copied to clipboard.");
+  $("#copy-link-btn").text("Copied To Clipboard!");
   setTimeout(function(){
     $("#copy-link-btn").text("Copy Lesson Link");
-  }, 2000);
+  }, 500);
 
 }
 
@@ -242,6 +254,20 @@ function createSlide(slide, index) {
         onclick: "lastSlide()"
       })
         .append('<i class="fa fa-angle-double-right" aria-hidden="true"></i>')
+    )
+    .append(
+      $("<div>", {
+        class: "page-nav-btn page-nav-home",
+        onclick: "goHome()"
+      })
+        .append('<i class="fa fa-home" aria-hidden="true"></i>')
+    )
+    .append(
+      $("<div>", {
+        class: "page-nav-btn page-nav-source",
+        onclick: "goToSource()"
+      })
+        .append('<i class="fa fa-code" aria-hidden="true"></i>')
     );
   out.append(pageNav);
   return out;
@@ -299,6 +325,14 @@ function lastSlide() {
   saveSlidePosition();
   displaySlide();
   return slideIndex;
+}
+
+function goHome() {
+  window.location.href = window.location.origin;
+}
+
+function goToSource() {
+  window.location.href = "https://github.com/nafeu/minimal-elearning";
 }
 
 function goToSlideByElement(event, element) {
