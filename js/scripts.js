@@ -8,7 +8,6 @@ var body, main, front, meta, content, loadLesson, lessonUrlInput,
     lessonPath,
     title = 'Minimal eLearning',
     customBackgroundColor,
-    mathJaxCdn = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML",
     converter = new showdown.Converter({extensions: ['table']}),
     exampleLessonPath = './example.memd';
 
@@ -76,10 +75,6 @@ $(document).ready(function(){
       if (front.title) {
         title = front.title + " | Minimal eLearning"
         document.title = title
-      }
-
-      if (front.math) {
-        if (front.math == 'on') loadMathJax();
       }
 
       if (front.background) {
@@ -325,14 +320,6 @@ function goToSlide(index) {
     saveSlidePosition();
     displaySlide();
   }
-}
-
-function loadMathJax() {
-  $.getScript( mathJaxCdn, function( data, textStatus, jqxhr ) {
-    console.log( textStatus ); // Success
-    console.log( jqxhr.status ); // 200
-    console.log( "MathJax load was performed." );
-  });
 }
 
 function processSlide(slide) {
