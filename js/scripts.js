@@ -1,6 +1,5 @@
-var body,
-    main,
-    front,
+var body, main, front, meta, content, loadLesson, lessonUrlInput,
+    launchLessonBtn, copyLinkBtn, invalidLink, preview, hiddenUrl,
     htmlArray,
     slideIndex = 0,
     maxSlideIndex,
@@ -58,6 +57,7 @@ $(document).ready(function(){
   copyLinkBtn = $("#copy-link-btn");
   invalidLink = $("#invalid-link");
   preview = $("#preview");
+  hiddenUrl = $("#hidden-url");
 
   lessonUrl = getParameterByName('lesson');
 
@@ -136,7 +136,7 @@ $(document).ready(function(){
 
   lessonUrlInput.on('change', function(){
     var inputUrl = lessonUrlInput.val();
-    $("#hidden-url").val(generateUrl(inputUrl));
+    hiddenUrl.val(generateUrl(inputUrl));
     $.get(inputUrl).done(function(data){
       var front = jsyaml.loadFront(data);
       showPreview(front);
@@ -162,7 +162,6 @@ $(document).ready(function(){
 });
 
 function showPreview(data) {
-  var preview = $("#preview");
   preview.empty();
   preview.append("<p>Lesson details:</p>");
   preview.append("<h2>" + data.title + "</h2>");
@@ -177,8 +176,7 @@ function generateUrl(value) {
 }
 
 function copyUrl() {
-  var hiddenUrl = document.getElementById("hidden-url");
-  hiddenUrl.select();
+  document.getElementById("hidden-url").select();
   document.execCommand("copy");
   $("#copy-link-btn").text("Copied to clipboard.");
   setTimeout(function(){
