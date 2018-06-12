@@ -65,7 +65,7 @@ $(document).ready(function(){
     // Markdown parsing logic
     $.get(lessonUrl).done(function(data){
 
-      console.log("Retrieving data... (" + lessonPath + ")");
+      console.log("Retrieving data... (" + lessonUrl + ")");
       console.log(data);
 
       front = jsyaml.loadFront(data);
@@ -88,6 +88,8 @@ $(document).ready(function(){
 
       meta.append(createMeta(front));
 
+      htmlArray.unshift("<p><intro></intro></p>");
+
       htmlArray.forEach(function(slide, index){
         slide = slide.replace("<p>+++</p>", "");
         content.append(createSlide(processSlide(slide), index));
@@ -103,6 +105,7 @@ $(document).ready(function(){
       }
       saveSlidePosition();
       displaySlide();
+      resizeIntro();
 
     }).fail(function() {
       body.html("<h2>Presentation at <u>" + lessonUrl + "</u> could not be accessed or found.</h2>");
@@ -127,7 +130,8 @@ $(document).ready(function(){
 
   // Events
   $(window).resize(function(){
-    $(".slide").css("min-height", $(window).height() - 90);
+    resizeContentArea();
+    resizeIntro();
   });
 
   $("img").on('click', function(){
@@ -160,6 +164,15 @@ $(document).ready(function(){
   })
 
 });
+
+function resizeContentArea() {
+  $(".slide").css("min-height", $(window).height() - 90);
+}
+
+function resizeIntro() {
+  var introMarginTop = ($("#content").height() - $("#intro").height()) * 0.35;
+  $("#intro").css("margin-top", introMarginTop + "px");
+}
 
 function showPreview(data) {
   preview.empty();
@@ -239,8 +252,8 @@ function createSlide(slide, index) {
 function createMeta(meta) {
   var out = $("<div>", {class: "meta"});
   var innerHTML = "<span class='meta-title'>" + meta.title + "</span> by ";
-  innerHTML += meta.author + ", ";
-  innerHTML += meta.date.toISOString().slice(0, 10);
+  innerHTML += meta.author + "<span class='meta-date'> // ";
+  innerHTML += meta.date.toDateString() + "</span>";
   out.html(innerHTML);
   return out;
 }
@@ -401,11 +414,15 @@ function generateQuiz(data) {
 }
 
 function generateIntro(meta) {
-  var out = $("<div>", {class: "intro-container"});
+  var out = $("<div>", {class: "intro-container", id: "intro"});
   var title = $("<div>", {class: "intro-title"}).text(meta.title);
   var author = $("<div>", {class: "intro-author"}).text(meta.author);
+  var description = $("<div>", {class: "intro-description"}).text(meta.description);
+  var seperator = $("<div>", {class: "intro-seperator"});
   out.append(title);
   out.append(author);
+  out.append(seperator);
+  out.append(description);
   return out.prop('outerHTML');
 }
 
