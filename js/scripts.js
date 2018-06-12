@@ -107,6 +107,10 @@ $(document).ready(function(){
       displaySlide();
       resizeIntro();
 
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+
     }).fail(function() {
       body.html("<h2>Presentation at <u>" + lessonUrl + "</u> could not be accessed or found.</h2>");
     });
@@ -261,6 +265,9 @@ function createMeta(meta) {
 function displaySlide() {
   $(".slide").hide();
   $("#slide-"+slideIndex).show();
+  if (slideIndex == 0) {
+    resizeIntro();
+  }
 }
 
 function nextSlide() {

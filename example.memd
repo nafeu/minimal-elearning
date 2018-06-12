@@ -8,12 +8,20 @@ math: on
 
 # Lecture 1 - Intro
 
-This is a test lecture, today we will learn about the following topics:
+```javascript
+var s = "JavaScript syntax highlighting";
+alert(s);
+```
 
-- [topic 1](https://www.spss-tutorials.com/spss-syntax-beginners-tutorial/)
-- topic 2
-- topic 3
-- topic 4
+```python
+s = "Python syntax highlighting"
+print s
+```
+
+```
+No language indicated, so no syntax highlighting.
+But let's throw in a <b>tag</b>.
+```
 
 ## MathJax support
 
