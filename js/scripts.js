@@ -58,61 +58,7 @@ $(document).ready(function(){
   preview = $("#preview");
   hiddenUrl = $("#hidden-url");
 
-  lessonUrl = getParameterByName('lesson');
-
-  if (lessonUrl) {
-    // Markdown parsing logic
-    $.get(lessonUrl).done(function(data){
-
-      console.log("Retrieving data... (" + lessonUrl + ")");
-      console.log(data);
-
-      front = jsyaml.loadFront(data);
-      var html = converter.makeHtml(front.__content);
-      htmlArray = html.split("\n<p>+++</p>\n");
-      maxSlideIndex = htmlArray.length;
-
-      if (front.title) {
-        title = front.title + " | Minimal eLearning"
-        document.title = title
-      }
-
-      if (front.background) {
-        body.css("background", front.background)
-      }
-
-      meta.append(createMeta(front));
-
-      htmlArray.unshift("<p><intro></intro></p>");
-
-      htmlArray.forEach(function(slide, index){
-        slide = slide.replace("<p>+++</p>", "");
-        content.append(createSlide(processSlide(slide), index));
-      });
-
-      var querySlide = getParameterByName('slide')
-
-      if (querySlide && ((parseInt(querySlide) - 1) <= maxSlideIndex) && ((parseInt(querySlide) - 1) >= 0)) {
-        slideIndex = querySlide - 1
-      } else {
-        loadSlidePosition();
-        updateQueryString('slide', slideIndex + 1, true);
-      }
-      saveSlidePosition();
-      displaySlide();
-      resizeIntro();
-
-      $('pre code').each(function(i, block) {
-        hljs.highlightBlock(block);
-      });
-
-    }).fail(function() {
-      body.html("<h2>Presentation at <u>" + lessonUrl + "</u> could not be accessed or found.</h2>");
-    });
-  } else {
-    body.css("background", "white");
-    loadLesson.show();
-  }
+  initiateLesson();
 
   // Keyboard inputs
   $(this).keydown(function(e){
@@ -131,6 +77,7 @@ $(document).ready(function(){
   $(window).resize(function(){
     resizeContentArea();
     resizeIntro();
+    resizeEditor();
   });
 
   $("img").on('click', function(){
@@ -163,6 +110,67 @@ $(document).ready(function(){
 
 });
 
+function initiateLesson() {
+  lessonUrl = getParameterByName('lesson');
+
+  if (lessonUrl) {
+    // Markdown parsing logic
+    $.get(lessonUrl).done(function(data){
+      processLessonData(data);
+    }).fail(function() {
+      body.html("<h2>Presentation at <u>" + lessonUrl + "</u> could not be accessed or found.</h2>");
+    });
+  } else {
+    body.css("background", "white");
+    loadLesson.show();
+  }
+}
+
+function processLessonData(data) {
+  console.log("Retrieving data...");
+  console.log(data);
+
+  front = jsyaml.loadFront(data);
+  var html = converter.makeHtml(front.__content);
+  htmlArray = html.split("\n<p>+++</p>\n");
+  maxSlideIndex = htmlArray.length;
+
+  if (front.title) {
+    title = front.title + " | Minimal eLearning"
+    document.title = title
+  }
+
+  if (front.background) {
+    body.css("background", front.background)
+  }
+
+  meta.append(createMeta(front));
+
+  htmlArray.unshift("<p><intro></intro></p>");
+
+  htmlArray.forEach(function(slide, index){
+    slide = slide.replace("<p>+++</p>", "");
+    content.append(createSlide(processSlide(slide), index));
+  });
+
+  var querySlide = getParameterByName('slide')
+
+  if (querySlide && ((parseInt(querySlide) - 1) <= maxSlideIndex) && ((parseInt(querySlide) - 1) >= 0)) {
+    slideIndex = querySlide - 1
+  } else {
+    loadSlidePosition();
+    updateQueryString('slide', slideIndex + 1, true);
+  }
+  saveSlidePosition();
+  displaySlide();
+  resizeIntro();
+  resizeEditor();
+
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+}
+
 function showValidLink() {
   copyLinkBtn.show();
   launchLessonBtn.show();
@@ -183,6 +191,10 @@ function resizeContentArea() {
 function resizeIntro() {
   var introMarginTop = ($("#content").height() - $("#intro").height()) * 0.35;
   $("#intro").css("margin-top", introMarginTop + "px");
+}
+
+function resizeEditor() {
+  $(".CodeMirror, .CodeMirror-scroll").css("min-height", $(window).height() - 90);
 }
 
 function showPreview(data) {
@@ -587,3 +599,70 @@ window.onpopstate = function(event) {
     goToSlide(event.state.slide - 1)
   }
 };
+
+var simplemde = new SimpleMDE({
+  autofocus: true,
+  autosave: {
+    enabled: true,
+    uniqueId: "MyUniqueID",
+    delay: 1000,
+  },
+  blockStyles: {
+    bold: "__",
+    italic: "_"
+  },
+  element: document.getElementById("editor-area"),
+  forceSync: true,
+  hideIcons: ["guide", "heading"],
+  indentWithTabs: false,
+  initialValue: "Hello world!",
+  insertTexts: {
+    horizontalRule: ["", "\n\n-----\n\n"],
+    image: ["![](http://", ")"],
+    link: ["[", "](http://)"],
+    table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n"],
+  },
+  lineWrapping: false,
+  parsingConfig: {
+    allowAtxHeaderWithoutSpace: true,
+    strikethrough: false,
+    underscoresBreakWords: true,
+  },
+  placeholder: "Type here...",
+  previewRender: function(plainText) {
+    return customMarkdownParser(plainText); // Returns HTML from a custom parser
+  },
+  previewRender: function(plainText, preview) { // Async method
+    setTimeout(function(){
+      preview.innerHTML = customMarkdownParser(plainText);
+    }, 250);
+
+    return "Loading...";
+  },
+  promptURLs: true,
+  renderingConfig: {
+    singleLineBreaks: false,
+    codeSyntaxHighlighting: true,
+  },
+  shortcuts: {
+    drawTable: "Cmd-Alt-T"
+  },
+  showIcons: ["code", "table"],
+  spellChecker: false,
+  status: false,
+  status: ["autosave", "lines", "words", "cursor"], // Optional usage
+  status: ["autosave", "lines", "words", "cursor", {
+    className: "keystrokes",
+    defaultValue: function(el) {
+      this.keystrokes = 0;
+      el.innerHTML = "0 Keystrokes";
+    },
+    onUpdate: function(el) {
+      el.innerHTML = ++this.keystrokes + " Keystrokes";
+    }
+  }], // Another optional usage, with a custom status bar item that counts keystrokes
+  styleSelectedText: false,
+  tabSize: 4,
+  toolbar: false,
+  toolbarTips: false,
+});
