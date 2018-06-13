@@ -286,6 +286,9 @@ body {
 .page-nav-prev:hover,
 .page-nav-next:hover,
 .page-nav-last:hover,
+.page-nav-source:hover,
+.page-nav-github:hover,
+.page-nav-home:hover,
 .page-nav-position-selection:hover {
   opacity: 0.25;
 }

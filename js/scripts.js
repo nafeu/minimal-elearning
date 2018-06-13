@@ -70,7 +70,7 @@ $(document).ready(function(){
       front = jsyaml.loadFront(data);
       var html = converter.makeHtml(front.__content);
       htmlArray = html.split("\n<p>+++</p>\n");
-      maxSlideIndex = htmlArray.length - 1;
+      maxSlideIndex = htmlArray.length;
 
       if (front.title) {
         title = front.title + " | Minimal eLearning"
@@ -118,11 +118,11 @@ $(document).ready(function(){
   $(this).keydown(function(e){
     e = e || window.event;
     if (e.keyCode == '219' || e.keyCode == '37') {
-      e.preventDefault();
+      // e.preventDefault();
       prevSlide();
     }
     else if (e.keyCode == '221' || e.keyCode == '39') {
-      e.preventDefault();
+      // e.preventDefault();
       nextSlide();
     }
   });
@@ -187,12 +187,14 @@ function resizeIntro() {
 
 function showPreview(data) {
   preview.empty();
-  preview.append("<p>Lesson details:</p>");
-  preview.append("<h2>" + data.title + "</h2>");
-  preview.append("<h3>by " + data.author + "</h3>");
-  preview.append("<h4>" + data.description + "</h4>");
-  preview.append("<p>" + data.date.toDateString() + "</p>");
-  preview.show();
+  if (data.title && data.author && data.description && data.date) {
+    preview.append("<p>Lesson details:</p>");
+    preview.append("<h2>" + data.title + "</h2>");
+    preview.append("<h3>by " + data.author + "</h3>");
+    preview.append("<h4>" + data.description + "</h4>");
+    preview.append("<p>" + data.date.toDateString() + "</p>");
+    preview.show();
+  }
 }
 
 function generateUrl(value) {
@@ -268,6 +270,13 @@ function createSlide(slide, index) {
         onclick: "goToSource()"
       })
         .append('<i class="fa fa-code" aria-hidden="true"></i>')
+    )
+    .append(
+      $("<div>", {
+        class: "page-nav-btn page-nav-github",
+        onclick: "goToGithub()"
+      })
+        .append('<i class="fa fa-github" aria-hidden="true"></i>')
     );
   out.append(pageNav);
   return out;
@@ -332,6 +341,10 @@ function goHome() {
 }
 
 function goToSource() {
+  window.location.href = lessonUrl;
+}
+
+function goToGithub() {
   window.location.href = "https://github.com/nafeu/minimal-elearning";
 }
 
