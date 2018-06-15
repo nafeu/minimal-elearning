@@ -1,15 +1,13 @@
-var body, main, front, meta, content, loadLesson, lessonUrlInput,
+var body, main, front, meta, content, lessonLoader, lessonUrlInput,
     launchLessonBtn, copyLinkBtn, invalidLink, preview, hiddenUrl,
     htmlArray,
+    dropper,
     slideIndex = 0,
     maxSlideIndex,
     quizCounter = 0,
-    lessonUrl,
-    lessonPath,
     title = 'Minimal eLearning',
     customBackgroundColor,
-    converter = new showdown.Converter({extensions: ['table']}),
-    exampleLessonPath = './example.memd';
+    converter = new showdown.Converter({extensions: ['table']});
 
 var quizTools = {
   correctMessages: [
@@ -50,8 +48,9 @@ $(document).ready(function(){
   main = $("#main");
   meta = $("#meta");
   content = $("#content");
-  loadLesson = $("#load-lesson");
-  lessonUrlInput = $("#lesson-url-input");
+  lessonLoader = $("#lesson-loader");
+  dropper = document.getElementById("lesson-loader-field");
+  lessonLoaderField = $("#lesson-loader-field");
   launchLessonBtn = $("#launch-lesson-btn");
   copyLinkBtn = $("#copy-link-btn");
   invalidLink = $("#invalid-link");
@@ -84,21 +83,43 @@ $(document).ready(function(){
     window.open($(this).attr('src'), '_blank');
   });
 
-  lessonUrlInput.on('change', function(){
-    var inputUrl = lessonUrlInput.val();
-    if (inputUrl.length > 0) {
-      $.get(inputUrl).done(function(data){
-        var front = jsyaml.loadFront(data);
-        showPreview(front);
-        hiddenUrl.val(generateUrl(inputUrl));
-        showValidLink();
-      }).fail(function(error){
-        showInvalidLink();
-      })
-    } else {
-      showInvalidLink();
-    }
-  })
+
+  dropper.ondragover = function() {
+    this.className = "dropper-hover";
+    return false;
+  }
+
+  dropper.ondragend = function() {
+    this.className = "";
+    return false;
+  }
+
+  dropper.ondrop = function(e) {
+    this.className = "";
+    e.preventDefault();
+    var file = e.dataTransfer.files[0],
+        reader = new FileReader();
+    reader.onload = function(event) {
+      loadIntoSession(event.target.result);
+    };
+    reader.readAsText(file);
+  }
+
+  // lessonLoaderField.on('change', function(){
+  //   var inputUrl = lessonUrlInput.val();
+  //   if (inputUrl.length > 0) {
+  //     $.get(inputUrl).done(function(data){
+  //       var front = jsyaml.loadFront(data);
+  //       showPreview(front);
+  //       hiddenUrl.val(generateUrl(inputUrl));
+  //       showValidLink();
+  //     }).fail(function(error){
+  //       showInvalidLink();
+  //     })
+  //   } else {
+  //     showInvalidLink();
+  //   }
+  // })
 
   launchLessonBtn.on('click', function(){
     if (lessonUrlInput.val().length > 0) {
@@ -111,24 +132,53 @@ $(document).ready(function(){
 });
 
 function initiateLesson() {
-  lessonUrl = getParameterByName('lesson');
-
-  if (lessonUrl) {
-    // Markdown parsing logic
-    $.get(lessonUrl).done(function(data){
-      processLessonData(data);
-    }).fail(function() {
-      body.html("<h2>Presentation at <u>" + lessonUrl + "</u> could not be accessed or found.</h2>");
-    });
-  } else {
-    body.css("background", "white");
-    loadLesson.show();
+  lessonParam = getParameterByName('lesson');
+  localParam = getParameterByName('local');
+  if (lessonParam) {
+    loadByUrl(lessonParam);
   }
+  else if (localParam) {
+    loadBySession();
+  } else {
+    showLessonLoader();
+  }
+}
+
+function loadByUrl(url) {
+  $.get(url).done(function(data){
+    processLessonData(data);
+  }).fail(function() {
+    body.html("<h2>Presentation at <u>" + url + "</u> could not be accessed or found.</h2>");
+  });
+}
+
+function loadBySession() {
+  if (window.sessionStorage.lessonData) {
+    processLessonData(window.sessionStorage.lessonData);
+  } else {
+    body.html("<h2>Local presentation could not be found.</h2>");
+  }
+}
+
+function launchSession() {
+  if (window.sessionStorage.lessonData) {
+    window.location.href = "http://localhost:3000?local=true";
+  }
+}
+
+function loadIntoSession(data) {
+  window.sessionStorage.lessonData = data;
+  showPreview(jsyaml.loadFront(data));
+}
+
+function showLessonLoader() {
+  body.css("background", "white");
+  lessonLoader.show();
 }
 
 function processLessonData(data) {
   console.log("Retrieving data...");
-  console.log(data);
+  console.log({data: data});
 
   front = jsyaml.loadFront(data);
   var html = converter.makeHtml(front.__content);
@@ -139,6 +189,9 @@ function processLessonData(data) {
     title = front.title + " | Minimal eLearning"
     document.title = title
   }
+
+  content.empty();
+  meta.empty();
 
   meta.append(createMeta(front));
 
@@ -154,10 +207,8 @@ function processLessonData(data) {
   if (querySlide && ((parseInt(querySlide) - 1) <= maxSlideIndex) && ((parseInt(querySlide) - 1) >= 0)) {
     slideIndex = querySlide - 1
   } else {
-    loadSlidePosition();
     updateQueryString('slide', slideIndex + 1, true);
   }
-  saveSlidePosition();
   displaySlide();
   resizeIntro();
   resizeEditor();
@@ -320,7 +371,6 @@ function nextSlide() {
   if (slideIndex < maxSlideIndex) {
     slideIndex++;
     updateQueryString('slide', slideIndex + 1, true);
-    saveSlidePosition();
     displaySlide();
   }
   return slideIndex;
@@ -330,7 +380,6 @@ function prevSlide() {
   if (slideIndex > 0) {
     slideIndex--;
     updateQueryString('slide', slideIndex + 1, true);
-    saveSlidePosition();
     displaySlide();
   }
   return slideIndex;
@@ -339,7 +388,6 @@ function prevSlide() {
 function firstSlide() {
   slideIndex = 0;
   updateQueryString('slide', slideIndex + 1, true);
-  saveSlidePosition();
   displaySlide();
   return slideIndex;
 }
@@ -347,7 +395,6 @@ function firstSlide() {
 function lastSlide() {
   slideIndex = maxSlideIndex;
   updateQueryString('slide', slideIndex + 1, true);
-  saveSlidePosition();
   displaySlide();
   return slideIndex;
 }
@@ -370,7 +417,6 @@ function goToSlideByElement(event, element) {
     element.value = element.name;
     slideIndex = index;
     updateQueryString('slide', slideIndex + 1, true);
-    saveSlidePosition();
     displaySlide();
   }
   return slideIndex;
@@ -380,7 +426,6 @@ function goToSlide(index) {
   if (index <= maxSlideIndex) {
     slideIndex = index;
     updateQueryString('slide', slideIndex + 1, false);
-    saveSlidePosition();
     displaySlide();
   }
 }
@@ -551,19 +596,6 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function loadSlidePosition() {
-  // TODO: Update and re-enable
-  // var position = window.localStorage.getItem(lessonPath)
-  // if (position && (slideIndex <= maxSlideIndex)) {
-  //   slideIndex = parseInt(position)
-  // }
-}
-
-function saveSlidePosition() {
-  // TODO: Update and re-enable
-  // window.localStorage.setItem(lessonPath, slideIndex);
-}
-
 function updateQueryString(key, value, pushState, url) {
     var finalUrl;
     if (!url) url = window.location.href;
@@ -677,3 +709,7 @@ MathJax.Hub.Config({
     processEscapes: true
   }
 });
+
+if (typeof window.FileReader === 'undefined') {
+    alert("drag and drop support unavailable...");
+}

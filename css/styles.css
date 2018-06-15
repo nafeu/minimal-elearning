@@ -354,23 +354,71 @@ input {
 }
 
 #logo {
-  margin-top: 100px;
+  margin-top: 50px;
+  margin-bottom: 20px;
 }
 
 .url-instruction {
   font-size: 1.5em;
 }
 
-.url-input {
-  font-size: 1.5em;
-  padding: 10px;
-  border: 1px solid #15957A;
-  border-radius: 5px;
+#lesson-loader-field {
+  font-size: 1.2em;
+  text-align: left;
+  border: none;
+  border-bottom: 4px solid;
+  border-radius: 10px;
+  border-color: #15957A;
+  background-color: rgba(21, 149, 122, 0.08);
   width: 60%;
+  height: 80px;
+  padding: 40px;
+  line-height: 80px;
+  overflow: hidden;
+  resize: none;
+  transition: 300ms ease-in-out all;
 }
 
-.url-input::placeholder {
+#lesson-loader-field::placeholder {
   color: #15957A;
+}
+
+.dropper-hover {
+  background-color: #15957A !important;
+}
+
+.dropper-hover::placeholder {
+  color: white !important;
+}
+
+#lesson-loader-actions {
+  width: 60%;
+  margin-top: 10px;
+  padding: 10px;
+  display: inline-block;
+  font-size: 1.5em;
+}
+
+.lesson-loader-action {
+  border-radius: 10px;
+  min-width: 30px;
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+  color: #15957A;
+  border-bottom: 3px solid;
+  transition: 100ms ease-in-out all;
+  margin: 0px 5px 0px 5px;
+  background-color: rgba(21, 149, 122, 0.08);
+}
+
+.lesson-loader-action:hover {
+  background-color: white;
+  color: #15957A;
+}
+
+.lesson-loader-action:active {
+  opacity: 0.3;
 }
 
 .footer {
@@ -409,7 +457,6 @@ input {
 
 #preview {
   display: block;
-  margin-top: 30px;
 }
 
 #editor {
