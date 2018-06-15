@@ -16,10 +16,8 @@
     <link rel="stylesheet" href="vendor/github-markdown.min.css">
     <link rel="stylesheet" href="vendor/font-awesome.min.css">
     <link rel="stylesheet" href="vendor/github.min.css">
-    <link rel="stylesheet" href="vendor/simplemde.min.css">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link rel="icon" type="image/png" sizes="96x96" href="./favicon-96x96.png">
-    <script src="vendor/simplemde.min.js"></script>
     <script src="vendor/jquery.min.js"></script>
     <script src="vendor/showdown.min.js"></script>
     <script src="vendor/highlight.min.js"></script>
@@ -27,11 +25,14 @@
     <script src="lib/js-yaml-front-client.min.js"></script>
     <script src="lib/jquery.plugins.js"></script>
     <script src="vendor/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="vendor/ace/ace.js"></script>
+    <script src="vendor/ace/ext-language_tools.js"></script>
   </head>
   <body class="row">
-    <div style="display:none;" id="editor">
-      <div class="editor-container col-xs-12 col-sm-offset-2 col-sm-8">
-        <textarea id="editor-area"></textarea>
+    <div style="display:none;" id="editor-area">
+      <div id="editor-container" class="col-xs-12 col-sm-offset-2 col-sm-8">
+        <h3>Minimal eLearning | Editor</h3>
+        <div id="editor"></div>
       </div>
     </div>
     <div id="main" class="col-xs-12 col-sm-offset-2 col-sm-8">
