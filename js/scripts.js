@@ -140,10 +140,6 @@ function processLessonData(data) {
     document.title = title
   }
 
-  if (front.background) {
-    body.css("background", front.background)
-  }
-
   meta.append(createMeta(front));
 
   htmlArray.unshift("<p><intro></intro></p>");
@@ -165,6 +161,14 @@ function processLessonData(data) {
   displaySlide();
   resizeIntro();
   resizeEditor();
+
+  if (front.background) {
+    body.css("background", front.background)
+  }
+
+  if (front.color) {
+    $(".meta").css("color", front.color)
+  }
 
   $('pre code').each(function(i, block) {
     hljs.highlightBlock(block);
@@ -665,4 +669,11 @@ var simplemde = new SimpleMDE({
   tabSize: 4,
   toolbar: false,
   toolbarTips: false,
+});
+
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    processEscapes: true
+  }
 });
