@@ -5,6 +5,8 @@ var body, main, front, meta, content, lessonLoader, lessonUrlInput,
     slideIndex = 0,
     maxSlideIndex,
     quizCounter = 0,
+    lastLoadType,
+    lessonUrl,
     title = 'Minimal eLearning',
     customBackgroundColor,
     converter = new showdown.Converter({extensions: ['table']});
@@ -95,31 +97,38 @@ $(document).ready(function(){
   }
 
   dropper.ondrop = function(e) {
+    lastLoadType = "session";
     this.className = "";
     e.preventDefault();
-    var file = e.dataTransfer.files[0],
-        reader = new FileReader();
+    var file = e.dataTransfer.files[0];
+    var reader = new FileReader();
     reader.onload = function(event) {
       loadIntoSession(event.target.result);
     };
     reader.readAsText(file);
   }
 
-  // lessonLoaderField.on('change', function(){
-  //   var inputUrl = lessonUrlInput.val();
-  //   if (inputUrl.length > 0) {
-  //     $.get(inputUrl).done(function(data){
-  //       var front = jsyaml.loadFront(data);
-  //       showPreview(front);
-  //       hiddenUrl.val(generateUrl(inputUrl));
-  //       showValidLink();
-  //     }).fail(function(error){
-  //       showInvalidLink();
-  //     })
-  //   } else {
-  //     showInvalidLink();
-  //   }
-  // })
+  lessonLoaderField.on('change', function(e){
+    lessonUrl = e.target.value;
+    if (lessonUrl.length > 0) {
+      $.get(lessonUrl).done(function(data){
+        var front = jsyaml.loadFront(data);
+        showPreview(front);
+        lastLoadType = "url";
+        hiddenUrl.val(generateUrl(lessonUrl));
+      }).fail(function(error){
+        // invalid link
+      })
+    } else {
+      // invalid link
+    }
+  })
+
+  lessonLoaderField.on('keydown', function(e){
+    if (e.which == 13) {
+      this.blur();
+    }
+  })
 
   launchLessonBtn.on('click', function(){
     if (lessonUrlInput.val().length > 0) {
@@ -148,7 +157,7 @@ function loadByUrl(url) {
   $.get(url).done(function(data){
     processLessonData(data);
   }).fail(function() {
-    body.html("<h2>Presentation at <u>" + url + "</u> could not be accessed or found.</h2>");
+    window.location.href = window.location.origin;
   });
 }
 
@@ -156,13 +165,17 @@ function loadBySession() {
   if (window.sessionStorage.lessonData) {
     processLessonData(window.sessionStorage.lessonData);
   } else {
-    body.html("<h2>Local presentation could not be found.</h2>");
+    window.location.href = window.location.origin;
   }
 }
 
-function launchSession() {
-  if (window.sessionStorage.lessonData) {
+function launchLesson() {
+  if (lastLoadType == "session" && window.sessionStorage.lessonData) {
+    lessonUrl = null;
     window.location.href = "http://localhost:3000?local=true";
+  } else if (lastLoadType == "url" && lessonUrl) {
+    window.sessionStorage.lessonData = null;
+    window.location.href = "http://localhost:3000?lesson=" + encodeURI(lessonUrl);
   }
 }
 
@@ -227,13 +240,11 @@ function processLessonData(data) {
 }
 
 function showValidLink() {
-  copyLinkBtn.show();
   launchLessonBtn.show();
   invalidLink.hide();
 }
 
 function showInvalidLink() {
-  copyLinkBtn.hide();
   launchLessonBtn.hide();
   invalidLink.show();
   preview.hide();
@@ -253,15 +264,26 @@ function resizeEditor() {
 }
 
 function showPreview(data) {
-  preview.empty();
-  if (data.title && data.author && data.description && data.date) {
-    preview.append("<p>Lesson details:</p>");
-    preview.append("<h2>" + data.title + "</h2>");
-    preview.append("<h3>by " + data.author + "</h3>");
-    preview.append("<h4>" + data.description + "</h4>");
-    preview.append("<p>" + data.date.toDateString() + "</p>");
-    preview.show();
-  }
+  preview.slideUp(300);
+  setTimeout(function(){
+    preview.empty();
+    if (data.title && data.author && data.description && data.date) {
+      preview.append("<h3>" + data.title + "</h3>");
+      preview.append("<h4>by " + data.author + "</h4>");
+      preview.append("<p>" + data.description + "</p>");
+      preview.append("<p class='preview-date'>" + data.date.toDateString() + "</p>");
+      preview.append("<div class='launch-btn' onclick='launchLesson()'>Launch Lesson</div>");
+      preview.css("background-color", "rgba(21, 149, 122, 0.08)");
+      preview.css("color", "black");
+      if (data.background) {
+        preview.css("background-color", data.background);
+      }
+      if (data.color) {
+        preview.css("color", data.color);
+      }
+      preview.slideDown(400);
+    }
+  }, 350);
 }
 
 function generateUrl(value) {

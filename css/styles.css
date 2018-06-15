@@ -417,7 +417,7 @@ input {
   color: #15957A;
 }
 
-.lesson-loader-action:active {
+.lesson-loader-action:active, .launch-btn:active {
   opacity: 0.3;
 }
 
@@ -456,7 +456,28 @@ input {
 }
 
 #preview {
-  display: block;
+  display: inline-block;
+  width: 60%;
+  padding: 20px 40px 30px 40px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+.preview-date {
+  font-size: 0.7em;
+}
+
+.launch-btn {
+  border-radius: 10px;
+  border: 2px solid;
+  min-width: 30px;
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+  transition: 100ms ease-in-out all;
+  margin: 5px 5px 0px 5px;
+  color: inherit;
+  border-color: inherit;
 }
 
 #editor {
