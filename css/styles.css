@@ -374,8 +374,6 @@ input {
   height: 80px;
   padding: 40px;
   line-height: 80px;
-  overflow: hidden;
-  resize: none;
   transition: 300ms ease-in-out all;
 }
 
@@ -460,14 +458,14 @@ input {
   width: 60%;
   padding: 20px 40px 30px 40px;
   border-radius: 10px;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .preview-date {
   font-size: 0.7em;
 }
 
-.launch-btn {
+.launch-btn, .copy-link-btn {
   border-radius: 10px;
   border: 2px solid;
   min-width: 30px;

@@ -7,6 +7,7 @@ var body, main, front, meta, content, lessonLoader, lessonUrlInput,
     quizCounter = 0,
     lastLoadType,
     lessonUrl,
+    lessonLoaderField,
     title = 'Minimal eLearning',
     customBackgroundColor,
     converter = new showdown.Converter({extensions: ['table']});
@@ -239,15 +240,12 @@ function processLessonData(data) {
   });
 }
 
-function showValidLink() {
-  launchLessonBtn.show();
-  invalidLink.hide();
+function updateLoaderMessage(message) {
+  lessonLoaderField.attr("placeholder", message);
 }
 
-function showInvalidLink() {
-  launchLessonBtn.hide();
-  invalidLink.show();
-  preview.hide();
+function resetLoaderMessage() {
+  updateLoaderMessage("Paste your lesson url here or drop an .memd file");
 }
 
 function resizeContentArea() {
@@ -264,6 +262,7 @@ function resizeEditor() {
 }
 
 function showPreview(data) {
+  lessonLoaderField.val("");
   preview.slideUp(300);
   setTimeout(function(){
     preview.empty();
@@ -273,6 +272,9 @@ function showPreview(data) {
       preview.append("<p>" + data.description + "</p>");
       preview.append("<p class='preview-date'>" + data.date.toDateString() + "</p>");
       preview.append("<div class='launch-btn' onclick='launchLesson()'>Launch Lesson</div>");
+      if (lastLoadType == "url") {
+        preview.append("<div class='copy-link-btn' onclick='copyLink()'>Copy Lesson Link</div>");
+      }
       preview.css("background-color", "rgba(21, 149, 122, 0.08)");
       preview.css("color", "black");
       if (data.background) {
@@ -282,6 +284,8 @@ function showPreview(data) {
         preview.css("color", data.color);
       }
       preview.slideDown(400);
+    } else {
+      updateLoaderMessage("Invalid lesson file.");
     }
   }, 350);
 }
@@ -290,13 +294,13 @@ function generateUrl(value) {
   return encodeURI(window.location.href + "?lesson=" + value);
 }
 
-function copyUrl() {
+function copyLink() {
   document.getElementById("hidden-url").select();
   document.execCommand("copy");
-  $("#copy-link-btn").text("Copied To Clipboard!");
+  $(".copy-link-btn").text("Copied To Clipboard!");
   setTimeout(function(){
-    $("#copy-link-btn").text("Copy Lesson Link");
-  }, 500);
+    $(".copy-link-btn").text("Copy Lesson Link");
+  }, 750);
 
 }
 
@@ -654,7 +658,7 @@ function updateQueryString(key, value, pushState, url) {
 
 window.onpopstate = function(event) {
   if (event.state.slide) {
-    goToSlide(event.state.slide - 1)
+    goToSlide(event.state.slide - 1);
   }
 };
 

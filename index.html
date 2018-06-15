@@ -38,19 +38,30 @@
       <div id="meta" class="box"></div>
       <div id="content" class="box markdown-body"></div>
     </div>
-    <div style="display:none;" id="lesson-loader" class="col-xs-12 col-sm-offset-2 col-sm-8 text-center">
+    <div style="display:none;" id="lesson-loader" class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-8 col-md-offset-2 text-center">
       <input id="hidden-url" type="text">
       <img id="logo" src="img/logo.png">
       <br>
-      <textarea id="lesson-loader-field" type="text" placeholder="Paste your lesson url here or drop an .memd file"></textarea>
+      <input id="lesson-loader-field" type="text" placeholder="Paste your lesson url here or drop an .memd file">
       <br>
       <div id="preview" style="display:none;"></div>
-      <div id="lesson-loader-actions">
-        <i onclick="copyUrl()" class="lesson-loader-action fa fa-clipboard"></i>
-        <i onclick="" class="lesson-loader-action fa fa-folder"></i>
-        <i onclick="" class="lesson-loader-action fa fa-edit"></i>
-        <i onclick="" class="lesson-loader-action fa fa-question"></i>
-        <i onclick="goToGithub()" class="lesson-loader-action fa fa-github"></i>
+      <div id="lesson-loader-actions" onmouseleave="resetLoaderMessage()">
+        <i
+          onmouseenter="updateLoaderMessage('Open a lesson using the file browser')"
+          onclick=""
+          class="lesson-loader-action fa fa-folder"></i>
+        <i
+          onmouseenter="updateLoaderMessage('Build or edit your own lessons')"
+          onclick=""
+          class="lesson-loader-action fa fa-edit"></i>
+        <i
+          onmouseenter="updateLoaderMessage('Learn how to use Minimal eLearning')"
+          onclick=""
+          class="lesson-loader-action fa fa-question"></i>
+        <i
+          onmouseenter="updateLoaderMessage('View the project source-code and docs on github')"
+          onclick="goToGithub()"
+          class="lesson-loader-action fa fa-github"></i>
       </div>
       <p class="footer">&copy; 2018 Nafeu Nasir</p>
     </div>
