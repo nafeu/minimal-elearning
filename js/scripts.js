@@ -113,10 +113,12 @@ $(document).ready(function(){
         showPreview(front);
         hiddenUrl.val(generateUrl(lessonUrl));
       }).fail(function(error){
-        // invalid link
+        lessonLoaderField.val("");
+        updateLoaderMessage("Invalid lesson url.");
       })
     } else {
-      // invalid link
+      lessonLoaderField.val("");
+      updateLoaderMessage("Invalid lesson url.");
     }
   })
 
