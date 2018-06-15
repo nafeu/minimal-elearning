@@ -98,24 +98,19 @@ $(document).ready(function(){
   }
 
   dropper.ondrop = function(e) {
-    lastLoadType = "session";
     this.className = "";
     e.preventDefault();
     var file = e.dataTransfer.files[0];
-    var reader = new FileReader();
-    reader.onload = function(event) {
-      loadIntoSession(event.target.result);
-    };
-    reader.readAsText(file);
+    loadFile(file);
   }
 
   lessonLoaderField.on('change', function(e){
     lessonUrl = e.target.value;
     if (lessonUrl.length > 0) {
       $.get(lessonUrl).done(function(data){
+        lastLoadType = "url";
         var front = jsyaml.loadFront(data);
         showPreview(front);
-        lastLoadType = "url";
         hiddenUrl.val(generateUrl(lessonUrl));
       }).fail(function(error){
         // invalid link
@@ -151,6 +146,10 @@ function initiateLesson() {
     loadBySession();
   } else {
     showLessonLoader();
+    if (window.sessionStorage.lessonData) {
+      lastLoadType = "session";
+      showPreview(jsyaml.loadFront(window.sessionStorage.lessonData));
+    }
   }
 }
 
@@ -170,6 +169,16 @@ function loadBySession() {
   }
 }
 
+function loadFile(file) {
+  lastLoadType = "session";
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    loadIntoSession(event.target.result);
+  };
+  reader.readAsText(file);
+  reader = null;
+}
+
 function launchLesson() {
   if (lastLoadType == "session" && window.sessionStorage.lessonData) {
     lessonUrl = null;
@@ -177,6 +186,19 @@ function launchLesson() {
   } else if (lastLoadType == "url" && lessonUrl) {
     window.sessionStorage.lessonData = null;
     window.location.href = "http://localhost:3000?lesson=" + encodeURI(lessonUrl);
+  }
+}
+
+function openLessonFile() {
+  var uploadForm = document.createElement('form');
+  var fileInput = uploadForm.appendChild(document.createElement('input'));
+
+  fileInput.type = 'file';
+  fileInput.accept = ".memd";
+  fileInput.click();
+  fileInput.onchange = function(e) {
+    var file = this.files[0];
+    loadFile(file);
   }
 }
 
