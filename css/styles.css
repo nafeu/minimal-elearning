@@ -100,6 +100,11 @@ body {
   padding: 0.5em;
   margin-left: 0 !important;
   margin-right: 0 !important;
+  overflow-y: overlay;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 .meta {
@@ -120,7 +125,7 @@ body {
   border-radius: 5px;
   padding: 1.5em;
   display: none;
-  padding-bottom: 3.5em;
+  padding-top: 1.75em;
 }
 
 .hidden {
@@ -260,8 +265,12 @@ body {
 
 .page-nav {
   position: absolute;
-  bottom: 0.5em;
+  top: -1.5em;
   right: 1em;
+  background-color: white;
+  padding: 3px 5px 3px 5px;
+  border-bottom: 3px solid #B5BBC0;
+  border-radius: 10px;
 }
 
 .page-nav-btn {
@@ -275,7 +284,7 @@ body {
 .page-nav-position-selection {
   width: auto;
   border-radius: 5px;
-  background-color: #ecf0f1;
+  border: 1px solid #eaecef;
   padding: 2px;
   cursor: pointer;
   text-align: center;

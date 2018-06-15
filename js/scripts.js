@@ -82,7 +82,7 @@ $(document).ready(function(){
     resizeEditor();
   });
 
-  $("img").on('click', function(){
+  $(".clickable-image").on('click', function(){
     window.open($(this).attr('src'), '_blank');
   });
 
