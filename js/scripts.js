@@ -184,10 +184,10 @@ function loadFile(file) {
 function launchLesson() {
   if (lastLoadType == "session" && window.sessionStorage.lessonData) {
     lessonUrl = null;
-    window.location.href = window.location.origin + "?local=true";
+    window.location.href = window.location.origin + window.location.pathname + "?local=true";
   } else if (lastLoadType == "url" && lessonUrl) {
     window.sessionStorage.lessonData = null;
-    window.location.href = window.location.origin + "?lesson=" + encodeURI(lessonUrl);
+    window.location.href = window.location.origin + window.location.pathname + "?lesson=" + encodeURI(lessonUrl);
   }
 }
 
