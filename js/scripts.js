@@ -204,6 +204,14 @@ function openLessonFile() {
   }
 }
 
+function openTutorial() {
+  window.location.href = window.location.origin
+    + window.location.pathname
+    + "?lesson="
+    + "https://gist.githubusercontent.com/nafeu"
+    + "/b84eac8554257b4ac6acd8f09d88973a/raw";
+}
+
 function loadIntoSession(data) {
   window.sessionStorage.lessonData = data;
   showPreview(jsyaml.loadFront(data));
