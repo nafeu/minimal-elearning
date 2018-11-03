@@ -388,13 +388,6 @@ function createSlide(slide, index) {
     )
     .append(
       $("<div>", {
-        class: "page-nav-btn page-nav-source",
-        onclick: "goToSource()"
-      })
-        .append('<i class="fa fa-code" aria-hidden="true"></i>')
-    )
-    .append(
-      $("<div>", {
         class: "page-nav-btn page-nav-github",
         onclick: "goToGithub()"
       })
@@ -455,11 +448,7 @@ function lastSlide() {
 }
 
 function goHome() {
-  window.location.href = window.location.origin;
-}
-
-function goToSource() {
-  window.location.href = lessonUrl;
+  window.location.href = window.location.origin + window.location.pathname;
 }
 
 function goToGithub() {
