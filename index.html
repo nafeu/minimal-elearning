@@ -27,17 +27,22 @@
     <script src="vendor/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     <script src="vendor/ace/ace.js"></script>
     <script src="vendor/ace/ext-language_tools.js"></script>
+    <script src="vendor/FileSaver.js"></script>
   </head>
   <body class="row">
-    <div style="display:none;" id="editor-area">
-      <div id="editor-container" class="col-xs-12 col-sm-offset-2 col-sm-8">
-        <h3>Minimal eLearning | Editor</h3>
-        <div id="editor"></div>
-      </div>
-    </div>
     <div id="main" class="col-xs-12 col-sm-offset-2 col-sm-8">
       <div id="meta" class="box"></div>
       <div id="content" class="box markdown-body"></div>
+    </div>
+    <div style="display:none;" id="editor-container" class="col-xs-12 col-xs-12 col-md-offset-3 col-md-6 text-center">
+      <img id="logo" src="img/logo.png">
+      <div id="editor"></div>
+      <div id="editor-actions" onmouseleave="resetLoaderMessage()">
+        <i onclick="saveLesson()" class="editor-action fa fa-save"></i>
+        <i onclick="hideEditor()" class="editor-action fa fa-eye"></i>
+        <i onclick="openTutorial()" class="editor-action fa fa-question"></i>
+        <i onclick="goHome()" class="editor-action fa fa-home"></i>
+      </div>
     </div>
     <div style="display:none;" id="lesson-loader" class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-8 col-md-offset-2 text-center">
       <input id="hidden-url" type="text">
@@ -53,7 +58,7 @@
           class="lesson-loader-action fa fa-folder"></i>
         <i
           onmouseenter="updateLoaderMessage('Build or edit your own lessons')"
-          onclick=""
+          onclick="showEditor()"
           class="lesson-loader-action fa fa-edit"></i>
         <i
           onmouseenter="updateLoaderMessage('Learn how to use Minimal eLearning')"

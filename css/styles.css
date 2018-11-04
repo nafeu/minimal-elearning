@@ -398,7 +398,7 @@ input {
   color: white !important;
 }
 
-#lesson-loader-actions {
+#lesson-loader-actions, #editor-actions {
   width: 60%;
   margin-top: 10px;
   padding: 10px;
@@ -406,7 +406,7 @@ input {
   font-size: 1.5em;
 }
 
-.lesson-loader-action {
+.lesson-loader-action, .editor-action {
   border-radius: 10px;
   min-width: 30px;
   display: inline-block;
@@ -474,7 +474,7 @@ input {
   font-size: 0.7em;
 }
 
-.launch-btn, .copy-link-btn {
+.launch-btn, .copy-link-btn, .edit-btn {
   border-radius: 10px;
   border: 2px solid;
   min-width: 30px;
@@ -502,7 +502,21 @@ input {
 
 #editor {
   width: 100%;
-  height: 300px;
+  height: 500px;
+  border-radius: 10px;
+  border: 5px solid #f1f8f6;
+}
+
+.ace_gutter-cell {
+  color: #159f85;
+}
+
+.ace-tm .ace_gutter, .ace-tm .ace_marker-layer .ace_active-line {
+  background-color: #f1f8f6 !important;
+}
+
+.ace-tm .ace_gutter-active-line {
+  background-color: #15a9901a !important;
 }
 
 /* ==========================================================================

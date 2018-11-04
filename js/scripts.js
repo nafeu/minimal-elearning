@@ -10,6 +10,7 @@ var body, main, front, meta, content, lessonLoader, lessonUrlInput,
     lessonLoaderField,
     title = 'Minimal eLearning',
     customBackgroundColor,
+    editorValueBuffer,
     converter = new showdown.Converter({extensions: ['table']});
 
 var quizTools = {
@@ -60,7 +61,7 @@ $(document).ready(function(){
   preview = $("#preview");
   hiddenUrl = $("#hidden-url");
 
-  initiateLesson();
+  initiateApp();
 
   // Keyboard inputs
   $(this).keydown(function(e){
@@ -138,13 +139,15 @@ $(document).ready(function(){
 
 });
 
-function initiateLesson() {
+function initiateApp() {
   lessonParam = getParameterByName('lesson');
   localParam = getParameterByName('local');
-  if (lessonParam) {
+  editorParam = getParameterByName('editor');
+  if (editorParam) {
+    showEditor();
+  } else if (lessonParam) {
     loadByUrl(lessonParam);
-  }
-  else if (localParam) {
+  } else if (localParam) {
     loadBySession();
   } else {
     showLessonLoader();
@@ -211,6 +214,7 @@ function openTutorial() {
 
 function loadIntoSession(data) {
   window.sessionStorage.lessonData = data;
+  editor.setValue(data, 1);
   showPreview(jsyaml.loadFront(data));
 }
 
@@ -301,6 +305,7 @@ function showPreview(data) {
       preview.append("<p>" + data.description + "</p>");
       preview.append("<p class='preview-date'>" + data.date.toDateString() + "</p>");
       preview.append("<div class='launch-btn' onclick='launchLesson()'>Launch Lesson</div>");
+      preview.append("<div class='edit-btn' onclick='showEditor()'>Edit</div>");
       if (lastLoadType == "url") {
         preview.append("<div class='copy-link-btn' onclick='copyLink()'>Copy Lesson Link</div>");
       }
@@ -385,14 +390,16 @@ function createSlide(slide, index) {
         onclick: "goHome()"
       })
         .append('<i class="fa fa-home" aria-hidden="true"></i>')
-    )
-    .append(
-      $("<div>", {
-        class: "page-nav-btn page-nav-github",
-        onclick: "goToGithub()"
-      })
-        .append('<i class="fa fa-github" aria-hidden="true"></i>')
     );
+  if (getParameterByName('local')) {
+    pageNav.append(
+      $("<div>", {
+        class: "page-nav-btn page-nav-edit",
+        onclick: "goToEditor()"
+      })
+        .append('<i class="fa fa-pencil" aria-hidden="true"></i>')
+    );
+  }
   out.append(pageNav);
   return out;
 
@@ -675,8 +682,12 @@ function updateQueryString(key, value, pushState, url) {
 }
 
 window.onpopstate = function(event) {
-  if (event.state.slide) {
-    goToSlide(event.state.slide - 1);
+  if (event.state) {
+    if (event.state.editor) {
+      showEditor();
+    } else if (event.state.slide) {
+      goToSlide(event.state.slide - 1);
+    }
   }
 };
 
@@ -695,23 +706,59 @@ if (typeof window.FileReader === 'undefined') {
 ace.require("ace/ext/language_tools");
 
 var editor = ace.edit("editor");
-editor.session.setMode("ace/mode/markdown");
-editor.setTheme("ace/theme/tomorrow");
 editor.setOptions({
-    enableBasicAutocompletion: true,
-    enableSnippets: true,
-    enableLiveAutocompletion: false
+  enableBasicAutocompletion: true,
+  enableSnippets: true,
+  enableLiveAutocompletion: false
 });
 editor.setShowPrintMargin(false);
-editor.session.insert({row: 0, column: 0}, '---\ntitle: ""\nauthor: ""\ndescription: ""\ndate: ' + (new Date().toISOString().substring(0, 10)) + '\n---\n\n# First Slide\n\n+++');
+
+var editorStarterCode = "---\n"
+  + "title: \"Your Name\"\n"
+  + "author: \"Lesson Title\"\n"
+  + "description: \"Lesson Description\"\n"
+  + "date: " + (new Date().toISOString().substring(0, 10)) + "\n"
+  + "---\n\n"
+  + "# First Slide\n\n"
+  + "First slide content.\n\n"
+  + "+++\n\n"
+  + "# Second Slide\n\n"
+  + "Second slide content.\n\n"
+  + "+++";
+
+if (window.sessionStorage.lessonData) {
+  editor.session.insert({row: 0, column: 0}, window.sessionStorage.lessonData);
+}
 
 function hideEditor() {
-  processLessonData(editor.session.getValue());
-  $("#editor-area").hide();
-  main.show();
+  lastLoadType = 'session';
+  loadIntoSession(editor.session.getValue());
+  launchLesson();
+  editor.setValue(window.sessionStorage.lessonData, 1);
 }
 
 function showEditor() {
-  $("#editor-area").show();
+  if (window.sessionStorage.lessonData == null) {
+    editor.session.insert({row: 0, column: 0}, editorStarterCode);
+  }
+  body.css("background", "white");
+  window.history.pushState({}, document.title, "/?editor=true");
+  $("#editor-container").show();
   main.hide();
+  lessonLoader.hide();
+}
+
+function goToEditor() {
+  window.location.href = window.location.origin + window.location.pathname + "?editor=true";
+}
+
+function saveLesson() {
+  var data = editor.getValue();
+  var front = jsyaml.loadFront(data);
+  window.sessionStorage.lessonData = data;
+  saveTextAs(data, convertToKebabCase(front.title) + ".memd");
+}
+
+function convertToKebabCase(string) {
+  return string.replace(/\s+/g, '-').toLowerCase();
 }
