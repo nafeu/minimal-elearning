@@ -742,7 +742,7 @@ function showEditor() {
     editor.session.insert({row: 0, column: 0}, editorStarterCode);
   }
   body.css("background", "white");
-  window.history.pushState({}, document.title, "/?editor=true");
+  window.history.pushState({}, document.title, window.location.pathname + "?editor=true");
   $("#editor-container").show();
   main.hide();
   lessonLoader.hide();
