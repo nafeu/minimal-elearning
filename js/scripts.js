@@ -714,8 +714,8 @@ editor.setOptions({
 editor.setShowPrintMargin(false);
 
 var editorStarterCode = "---\n"
-  + "title: \"Your Name\"\n"
-  + "author: \"Lesson Title\"\n"
+  + "title: \"Lesson Title\"\n"
+  + "author: \"Your Name\"\n"
   + "description: \"Lesson Description\"\n"
   + "date: " + (new Date().toISOString().substring(0, 10)) + "\n"
   + "---\n\n"
